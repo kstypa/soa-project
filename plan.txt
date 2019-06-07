@@ -1,0 +1,40 @@
+1. strona logowania
+    jaas autoryzacja itd
+
+zwykły użytkownik
+    menu (jsf + beans + baza danych)
+1. Zamów posiłek
+    dodawanie do koszyka (druga podstrona)
+2. Zmień zamówienie na posiłek
+3. Anuluj zamówienie na posiłek
+4. Sprawdź menu
+5. Zarządzaj subskrypcjami na posiłki
+    opcja subskrybuj w koszyku
+
+menedżer restauracji
+6. Utwórz menu
+    dodawanie elementów do bazy z panelu admina
+7. Zmodyfikuj menu
+8. Usuń menu
+9. Archiwizuj menu
+    ???
+10. Zdefiniuj ofertę dnia
+    analogicznie do koszyka - dodaje produkty do oferty
+
+Personel kafeterii
+    kolejka posiłków z określonymi stanami (zamówienie/w przygotowaniu/gotowe do dostawy)
+11. Przygotuj posiłek
+12. Wygeneruj rachunek
+13. Zamów dostawę posiłku
+
+Dostawcy posiłków
+    ^kolejka (gotowe/w dostawie/dostarczone)
+14. Zarejestruj dostawę posiłku
+15. Odnotuj ze dostawa zastała wykonana.
+
+
+restauracje zewnętrzne (SOAP)
+    przesyłają menu
+    menedżer zatwierdza przesłane
+
+symulacja pracy Dostawcy
