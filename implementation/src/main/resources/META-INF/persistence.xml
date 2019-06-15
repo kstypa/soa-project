@@ -1,0 +1,12 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="JPA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:/MySqlDS2</jta-data-source>
+        <class>project.soa.model.Category</class>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!--            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>-->
+        </properties>
+    </persistence-unit>
+</persistence>

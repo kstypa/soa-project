@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="web" name="Web">
+    <facet type="jpa" name="JPA">
       <configuration>
-        <descriptors>
-          <deploymentDescriptor name="jboss-web.xml" url="file://$MODULE_DIR$/web/WEB-INF/jboss-web.xml" />
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
-        </descriptors>
-        <webroots>
-          <root url="file://$MODULE_DIR$/web" relative="/" />
-        </webroots>
-        <sourceRoots />
+        <setting name="validation-enabled" value="true" />
+        <datasource-mapping>
+          <factory-entry name="JPA" value="796f52b8-ec76-4e36-b558-ed12e561891c" />
+        </datasource-mapping>
+        <naming-strategy-map />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>
   </component>
@@ -19,17 +17,12 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="api" />
-    <orderEntry type="library" name="Maven: org.primefaces:primefaces:7.0" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.faces:jsf-impl:2.2.14" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.8" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:7.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.mail:javax.mail:1.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.clojure:java.jdbc:0.7.9" level="project" />
     <orderEntry type="library" name="Maven: org.clojure:clojure:1.7.0" level="project" />
@@ -54,6 +47,7 @@
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.15" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-jpamodelgen:5.4.2.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.8" level="project" />
     <orderEntry type="library" name="Maven: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.ejb:javax.ejb-api:3.2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.transaction:javax.transaction-api:1.3" level="project" />
