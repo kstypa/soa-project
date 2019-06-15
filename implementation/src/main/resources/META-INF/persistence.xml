@@ -2,7 +2,12 @@
     <persistence-unit name="JPA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:/MySqlDS2</jta-data-source>
+        <class>project.soa.model.Address</class>
         <class>project.soa.model.Category</class>
+        <class>project.soa.model.Dish</class>
+        <class>project.soa.model.Order</class>
+        <class>project.soa.model.Subscription</class>
+        <class>project.soa.model.User</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
