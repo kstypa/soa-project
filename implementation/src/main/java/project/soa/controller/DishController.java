@@ -1,5 +1,6 @@
 package project.soa.controller;
 
+import clojure.lang.IFn;
 import project.soa.api.IDishController;
 import project.soa.model.Category;
 import project.soa.model.Dish;
@@ -123,4 +124,51 @@ public class DishController extends AbstractController implements IDishControlle
             System.out.println("error deleting");
         }
     }
+
+    @Override
+    public List<Dish> setDishesApproved(List<Dish> dishes)
+    {
+        for (Dish dish: dishes)
+            setDishApproved(dish);
+        return dishes;
+    }
+
+    @Override
+    public Dish setDishApproved(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),true,dish.isArchived(),dish.isToday(),dish.getTimes_ordered());
+        return dish;
+    }
+
+    @Override
+    public List<Dish> setDishesArchived(List<Dish> dishes)
+    {
+        for (Dish dish: dishes)
+            setDishArchived(dish);
+        return dishes;
+    }
+
+    @Override
+    public Dish setDishArchived(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),true,dish.isToday(),dish.getTimes_ordered());
+        return dish;
+    }
+
+    @Override
+    public List<Dish> setDishesToday(List<Dish> dishes)
+    {
+        for (Dish dish: dishes)
+            setDishToday(dish);
+        return dishes;
+    }
+
+    @Override
+    public Dish setDishToday(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),dish.isArchived(),true,dish.getTimes_ordered());
+        return dish;
+    }
+
 }
+
