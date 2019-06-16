@@ -28,7 +28,7 @@ public class Order {
     private LocalDate delivery_date;
     private Status status;
 
-    enum Status { PLACED, PREPARING, PREPARED, DELIVERING, DELIVERED, CANCELED }
+    public enum Status { PLACED, PREPARING, PREPARED, DELIVERING, DELIVERED, CANCELED }
 
     @ManyToMany
     @JoinTable(

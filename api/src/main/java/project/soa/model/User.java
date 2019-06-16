@@ -20,5 +20,5 @@ public class User {
     private String last_name;
     private Role role;
 
-    enum Role { MANAGER, CLIENT, COOK, DELIVERY_BOY }
+    public enum Role { MANAGER, CLIENT, COOK, DELIVERY_BOY }
 }
