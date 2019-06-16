@@ -1,11 +1,13 @@
 package project.soa.controller;
 
 import project.soa.api.IOrderController;
+import project.soa.api.IDishController;
 import project.soa.model.Address;
 import project.soa.model.Dish;
 import project.soa.model.Order;
 import project.soa.model.User;
 
+import javax.ejb.EJB;
 import javax.persistence.Query;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderController extends AbstractController implements IOrderController {
+    private DishController dishController = new DishController();
+
     @Override
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
@@ -66,12 +70,110 @@ public class OrderController extends AbstractController implements IOrderControl
     }
 
     @Override
+    public List<Order> getAllPlacedOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.PLACED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+    @Override
+    public List<Order> getAllPreparingOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.PREPARING;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+    @Override
+    public List<Order> getAllPreparedOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.PREPARED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAllDeliveringOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.DELIVERING;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAllDeliveredOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.DELIVERED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAllCanceledOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.CANCELED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
     public Order addOrder(User user, Address address, LocalDateTime delivery_date, List<Dish> dishes) {
         Order order = new Order();
         order.setUser(user);
         order.setAddress(address);
         order.setDelivery_date(delivery_date);
         order.setDishes(dishes);
+        for(Dish dish: dishes)
+        {
+            dishController.increaseTimesOrdered(dish);
+        }
 
         try {
             entityManager.getTransaction().begin();
@@ -116,4 +218,9 @@ public class OrderController extends AbstractController implements IOrderControl
             System.out.println("error deleting");
         }
     }
+    @Override
+    public void cancelOrder(Order order) {
+        editOrder(order,order.getUser(),order.getAddress(),order.getDelivery_date(),Order.Status.CANCELED,order.getDishes());
+    }
+
 }
