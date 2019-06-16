@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity(name = "soa_subscriptions")
 @Data
 @NoArgsConstructor
-public class Subscription {
+public class Subscription implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

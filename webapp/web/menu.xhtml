@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Menu</title>
+    <style type="text/css">
+        .pg td {
+            vertical-align: top;
+        }
+        .pg {
+            border: none;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <h:form id="form">
+        <h1>Menu</h1>
+
+        <p:button value="Pokaż wszystkie pozycje" outcome="menu.xhtml" />
+        <br/>
+        <br/>
+        <h:outputText id="dishesMessage" value="#{menu.dishesMessage}" />
+
+        <h:panelGrid columns="2" styleClass="pg">
+            <p:panel id="panel1" styleClass="pg">
+                <p:menu toggleable="true" model="#{menu.categoryMenuModel}" />
+            </p:panel>
+            <p:panel id="panel2" styleClass="pg">
+                <p:dataTable id="menuTable" value="#{menu.dishes}" var="dish">
+
+                    <f:facet name="header">
+                        <h:outputText value="Menu" />
+                    </f:facet>
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{dish.id}" />
+                    </p:column>
+
+                    <p:column headerText="Nazwa">
+                        <h:outputText value="#{dish.name}" />
+                    </p:column>
+
+                    <p:column headerText="Cena">
+                        <h:outputText value="#{dish.price}" />
+                    </p:column>
+
+                    <p:column headerText="Rozmiar porcji">
+                        <h:outputText value="#{dish.size}" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+        </h:panelGrid>
+
+    </h:form>
+
+</h:body>
+</html>

@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "soa_dishes")
 @Data
 @NoArgsConstructor
-public class Dish {
+public class Dish implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
