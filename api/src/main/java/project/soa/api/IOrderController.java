@@ -19,9 +19,23 @@ public interface IOrderController {
 
     public Order getOrder(int id);
 
+    public List<Order> getAllPlacedOrders();
+
+    public List<Order> getAllPreparingOrders();
+
+    public List<Order> getAllPreparedOrders();
+
+    public List<Order> getAllDeliveringOrders();
+
+    public List<Order> getAllDeliveredOrders();
+
+    public List<Order> getAllCanceledOrders();
+
     public Order addOrder(User user, Address address, LocalDateTime delivery_date, List<Dish> dishes);
 
     public Order editOrder(Order order, User user, Address address, LocalDateTime delivery_date, Order.Status status, List<Dish> dishes);
+
+    public void cancelOrder(Order order);
 
     public void deleteOrder(Order order);
 }

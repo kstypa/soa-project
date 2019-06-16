@@ -19,17 +19,29 @@ public interface IDishController {
 
     public Dish editDish(Dish dish, String name, double price, Category category, String size, boolean approved, boolean archived, boolean today, int times_ordered);
 
-    public List<Dish> setDishesApproved(List<Dish> dishes);
+    public void setDishesApproved(List<Dish> dishes);
 
-    public Dish setDishApproved(Dish dish);
+    public void setDishApproved(Dish dish);
 
-    public List<Dish> setDishesArchived(List<Dish> dishes);
+    public void setDishesArchived(List<Dish> dishes);
 
-    public Dish setDishArchived(Dish dish);
+    public void setDishArchived(Dish dish);
 
-    public List<Dish> setDishesToday(List<Dish> dishes);
+    public void setDishesToday(List<Dish> dishes);
 
     public Dish setDishToday(Dish dish);
+
+    public void setDishNotToday(Dish dish);
+
+    public void setDishNotArchived(Dish dish);
+
+    public List<Dish> getTop10Dishes();
+
+    public List<Dish> getAllArchivedDishes();
+
+    public List<Dish> getAllNotArchivedDishes();
+
+    public List<Dish> getAllTodayDishes();
 
     public void deleteDish(Dish dish);
 }

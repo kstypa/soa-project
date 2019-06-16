@@ -66,6 +66,100 @@ public class OrderController extends AbstractController implements IOrderControl
     }
 
     @Override
+    public List<Order> getAllPlacedOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.PLACED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+    @Override
+    public List<Order> getAllPreparingOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.PREPARING;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+    @Override
+    public List<Order> getAllPreparedOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.PREPARED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAllDeliveringOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.DELIVERING;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAllDeliveredOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.DELIVERED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAllCanceledOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order.Status status = Order.Status.CANCELED;
+        Query query = entityManager.createQuery("from soa_orders where status =:status ", Order.class);
+        query.setParameter("status", status);
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
     public Order addOrder(User user, Address address, LocalDateTime delivery_date, List<Dish> dishes) {
         Order order = new Order();
         order.setUser(user);
@@ -116,4 +210,9 @@ public class OrderController extends AbstractController implements IOrderControl
             System.out.println("error deleting");
         }
     }
+    @Override
+    public void cancelOrder(Order order) {
+        editOrder(order,order.getUser(),order.getAddress(),order.getDelivery_date(),Order.Status.CANCELED,order.getDishes());
+    }
+
 }

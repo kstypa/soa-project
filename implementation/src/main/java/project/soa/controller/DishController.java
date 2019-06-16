@@ -9,8 +9,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 @Remote(IDishController.class)
@@ -113,6 +112,138 @@ public class DishController extends AbstractController implements IDishControlle
         return dish;
     }
 
+
+    @Override
+    public void setDishesApproved(List<Dish> dishes)
+    {
+        for (Dish dish: dishes)
+            setDishApproved(dish);
+
+    }
+
+    @Override
+    public void setDishApproved(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),true,dish.isArchived(),dish.isToday(),dish.getTimes_ordered());
+
+    }
+
+    @Override
+    public void setDishesArchived(List<Dish> dishes)
+    {
+        for (Dish dish: dishes)
+            setDishArchived(dish);
+    }
+
+    @Override
+    public void setDishArchived(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),true,dish.isToday(),dish.getTimes_ordered());
+    }
+
+    @Override
+    public void setDishesToday(List<Dish> dishes)
+    {
+        for (Dish dish: dishes)
+            setDishToday(dish);
+    }
+
+    @Override
+    public Dish setDishToday(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),dish.isArchived(),true,dish.getTimes_ordered());
+        return dish;
+    }
+
+    @Override
+    public void setDishNotToday(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),dish.isArchived(),false,dish.getTimes_ordered());
+    }
+
+    @Override
+    public void setDishNotArchived(Dish dish)
+    {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),false,dish.isToday(),dish.getTimes_ordered());
+    }
+
+
+    class DishComparator implements Comparator<Dish>
+    {
+        @Override
+        public int compare(Dish o1, Dish o2) {
+            if(o1.getTimes_ordered() < o2.getTimes_ordered()){
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+    @Override
+    public List<Dish> getTop10Dishes() {
+        ArrayList<Dish> allDishes= new ArrayList(getAllDishes());
+        Collections.sort(allDishes,new DishComparator());
+        ArrayList<Dish> result = new ArrayList<Dish>();
+        for (int i=0;i<10;i++)
+        {
+            result.add(allDishes.get(i));
+        }
+        return result;
+    }
+
+    @Override
+    public List<Dish> getAllArchivedDishes()
+    {
+        List<Dish> dishes = new ArrayList<>();
+        Query query = entityManager.createQuery("from soa_dishes where archived = true", Dish.class);
+
+
+        try {
+            dishes = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return dishes;
+    }
+
+    @Override
+    public List<Dish> getAllNotArchivedDishes()
+    {
+        List<Dish> dishes = new ArrayList<>();
+        Query query = entityManager.createQuery("from soa_dishes where archived = false", Dish.class);
+
+
+        try {
+            dishes = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return dishes;
+    }
+
+    @Override
+    public List<Dish> getAllTodayDishes()
+    {
+        List<Dish> dishes = new ArrayList<>();
+        Query query = entityManager.createQuery("from soa_dishes where today = true", Dish.class);
+
+
+        try {
+            dishes = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return dishes;
+    }
+
+
     @Override
     public void deleteDish(Dish dish) {
         try {
@@ -123,51 +254,6 @@ public class DishController extends AbstractController implements IDishControlle
         catch (Exception e) {
             System.out.println("error deleting");
         }
-    }
-
-    @Override
-    public List<Dish> setDishesApproved(List<Dish> dishes)
-    {
-        for (Dish dish: dishes)
-            setDishApproved(dish);
-        return dishes;
-    }
-
-    @Override
-    public Dish setDishApproved(Dish dish)
-    {
-        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),true,dish.isArchived(),dish.isToday(),dish.getTimes_ordered());
-        return dish;
-    }
-
-    @Override
-    public List<Dish> setDishesArchived(List<Dish> dishes)
-    {
-        for (Dish dish: dishes)
-            setDishArchived(dish);
-        return dishes;
-    }
-
-    @Override
-    public Dish setDishArchived(Dish dish)
-    {
-        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),true,dish.isToday(),dish.getTimes_ordered());
-        return dish;
-    }
-
-    @Override
-    public List<Dish> setDishesToday(List<Dish> dishes)
-    {
-        for (Dish dish: dishes)
-            setDishToday(dish);
-        return dishes;
-    }
-
-    @Override
-    public Dish setDishToday(Dish dish)
-    {
-        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),dish.isArchived(),true,dish.getTimes_ordered());
-        return dish;
     }
 
 }
