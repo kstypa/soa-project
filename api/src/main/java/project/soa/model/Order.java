@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity(name = "soa_orders")
@@ -24,8 +25,8 @@ public class Order {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    private LocalDate ordered_date;
-    private LocalDate delivery_date;
+    private LocalDateTime ordered_date;
+    private LocalDateTime delivery_date;
     private Status status;
 
     public enum Status { PLACED, PREPARING, PREPARED, DELIVERING, DELIVERED, CANCELED }

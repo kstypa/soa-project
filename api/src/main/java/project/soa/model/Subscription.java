@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity(name = "soa_subscriptions")
@@ -25,7 +27,9 @@ public class Subscription {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    private LocalDate ordered_date;
+    private LocalDateTime ordered_date;
+
+    private LocalTime delivery_hour;
 
     private DayOfWeek delivery_day;
 

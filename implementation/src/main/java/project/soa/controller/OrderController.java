@@ -8,6 +8,7 @@ import project.soa.model.User;
 
 import javax.persistence.Query;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class OrderController extends AbstractController implements IOrderControl
     }
 
     @Override
-    public Order addOrder(User user, Address address, LocalDate delivery_date, List<Dish> dishes) {
+    public Order addOrder(User user, Address address, LocalDateTime delivery_date, List<Dish> dishes) {
         Order order = new Order();
         order.setUser(user);
         order.setAddress(address);
@@ -85,7 +86,7 @@ public class OrderController extends AbstractController implements IOrderControl
     }
 
     @Override
-    public Order editOrder(Order order, User user, Address address, LocalDate delivery_date, Order.Status status, List<Dish> dishes) {
+    public Order editOrder(Order order, User user, Address address, LocalDateTime delivery_date, Order.Status status, List<Dish> dishes) {
         try {
             entityManager.getTransaction().begin();
             entityManager.detach(order);

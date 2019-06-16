@@ -6,6 +6,7 @@ import project.soa.model.Order;
 import project.soa.model.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IOrderController {
@@ -18,9 +19,9 @@ public interface IOrderController {
 
     public Order getOrder(int id);
 
-    public Order addOrder(User user, Address address, LocalDate delivery_date, List<Dish> dishes);
+    public Order addOrder(User user, Address address, LocalDateTime delivery_date, List<Dish> dishes);
 
-    public Order editOrder(Order order, User user, Address address, LocalDate delivery_date, Order.Status status, List<Dish> dishes);
+    public Order editOrder(Order order, User user, Address address, LocalDateTime delivery_date, Order.Status status, List<Dish> dishes);
 
     public void deleteOrder(Order order);
 }
