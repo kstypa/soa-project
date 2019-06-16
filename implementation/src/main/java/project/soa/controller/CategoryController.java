@@ -15,7 +15,7 @@ public class CategoryController extends AbstractController implements ICategoryC
 
     @Override
     public List<Category> getAllCategories() {
-        List<Category> categories = new ArrayList<>();
+        List<Category> categories = new ArrayList<Category>();
         Query query = entityManager.createQuery("from soa_categories", Category.class);
 
         try {
