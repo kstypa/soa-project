@@ -1,11 +1,13 @@
 package project.soa.controller;
 
 import project.soa.api.IOrderController;
+import project.soa.api.IDishController;
 import project.soa.model.Address;
 import project.soa.model.Dish;
 import project.soa.model.Order;
 import project.soa.model.User;
 
+import javax.ejb.EJB;
 import javax.persistence.Query;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderController extends AbstractController implements IOrderController {
+    private DishController dishController = new DishController();
+
     @Override
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
@@ -166,6 +170,10 @@ public class OrderController extends AbstractController implements IOrderControl
         order.setAddress(address);
         order.setDelivery_date(delivery_date);
         order.setDishes(dishes);
+        for(Dish dish: dishes)
+        {
+            dishController.increaseTimesOrdered(dish);
+        }
 
         try {
             entityManager.getTransaction().begin();

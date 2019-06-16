@@ -182,7 +182,7 @@ public class DishController extends AbstractController implements IDishControlle
 
     @Override
     public List<Dish> getTop10Dishes() {
-        ArrayList<Dish> allDishes= new ArrayList(getAllDishes());
+        ArrayList<Dish> allDishes= new ArrayList(getAllNotArchivedDishes());
         Collections.sort(allDishes,new DishComparator());
         ArrayList<Dish> result = new ArrayList<Dish>();
         for (int i=0;i<10;i++)
@@ -230,7 +230,7 @@ public class DishController extends AbstractController implements IDishControlle
     public List<Dish> getAllTodayDishes()
     {
         List<Dish> dishes = new ArrayList<>();
-        Query query = entityManager.createQuery("from soa_dishes where today = true", Dish.class);
+        Query query = entityManager.createQuery("from soa_dishes where today = true and archived=false and approved = true", Dish.class);
 
 
         try {
@@ -243,6 +243,10 @@ public class DishController extends AbstractController implements IDishControlle
         return dishes;
     }
 
+    @Override
+    public void increaseTimesOrdered(Dish dish) {
+        editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),dish.isArchived(),dish.isToday(),dish.getTimes_ordered()+1);
+    }
 
     @Override
     public void deleteDish(Dish dish) {

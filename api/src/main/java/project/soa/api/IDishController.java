@@ -43,5 +43,7 @@ public interface IDishController {
 
     public List<Dish> getAllTodayDishes();
 
+    public void increaseTimesOrdered(Dish dish);
+
     public void deleteDish(Dish dish);
 }
