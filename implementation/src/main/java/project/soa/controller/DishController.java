@@ -24,7 +24,7 @@ public class DishController extends AbstractController implements IDishControlle
             dishes = query.getResultList();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("select error");
         }
 
         return dishes;
@@ -40,7 +40,7 @@ public class DishController extends AbstractController implements IDishControlle
             dishes = query.getResultList();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("select error");
         }
 
         return dishes;

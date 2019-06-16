@@ -9,7 +9,7 @@ public interface IAddressController {
 
     public List<Address> getAllAddresses();
 
-    public Address getAddressesByUser(User user);
+    public List<Address> getAddressesByUser(User user);
 
     public Address getAddress(int id);
 

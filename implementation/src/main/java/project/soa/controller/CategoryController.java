@@ -23,7 +23,7 @@ public class CategoryController extends AbstractController implements ICategoryC
             categories = query.getResultList();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("select error");
         }
 
         return categories;
