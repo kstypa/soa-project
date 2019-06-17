@@ -1,6 +1,7 @@
 import lombok.Data;
 import project.soa.api.IOrderController;
 import project.soa.model.Order;
+import project.soa.model.User;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -41,6 +42,8 @@ public class OrdersView {
 
     List<Order> ordersInTimeFrame;
 
+    List<Order> ordersInTimeFrameForUser;
+
     @PostConstruct
     private void init(){
         allOrders=orderController.getAllOrders();
@@ -61,6 +64,19 @@ public class OrdersView {
     public void getOrdersInTimeFrame(LocalDateTime date1, LocalDateTime date2)
     {
         ordersInTimeFrame=orderController.getOrdersBetweenDates(date1,date2);
+    }
+
+    public void getOrdersInTimeFrameForUser(LocalDateTime date1, LocalDateTime date2,User user)
+    {
+        getOrdersInTimeFrame(date1,date2);
+        ordersInTimeFrameForUser=new ArrayList<>();
+        for (Order order: ordersInTimeFrame) {
+            if(order.getUser().equals(user))
+            {
+                ordersInTimeFrameForUser.add(order);
+            }
+
+        }
     }
 
     public Order.Status moveToNextStatus(Order.Status status)
