@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<head>
+<h:head>
     <meta charset="UTF-8"/>
     <title>Zamówienie</title>
 
-</head>
-<body>
-    <h:form id="CookOrders">
-        <p:repeat value="#{orders.placedOrPreparingOrders}" var="order">
+</h:head>
+<h:body>
+
+    <h:form id="form">
+        <h1>Zamówienia</h1>
+
+        <p:button value="Strona główna" outcome="index.xhtml" />
+        <p:button value="Menu" outcome="menu.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <p:button value="Zamówienia" outcome="orders.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!userSession.loggedIn}" />
+        <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!userSession.loggedIn}" />
+
+        <p:repeat id="CookOrders" rendered="#{userSession.cook}" value="#{orders.placedOrPreparingOrders}" var="order">
             <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
 
                 <p:outputPanel>
@@ -38,12 +47,10 @@
                     </h:panelGrid>
                 </p:outputPanel>
             </h:panelGrid>
-            <hr />
+            <br />
         </p:repeat>
-    </h:form>
 
-    <h:form id="DeliveryboyOrders">
-        <p:repeat value="#{orders.placedOrPreparingOrders}" var="order">
+        <p:repeat id="DeliveryboyOrders" rendered="#{userSession.deliveryBoy}" value="#{orders.placedOrPreparingOrders}" var="order">
             <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
 
                 <p:outputPanel>
@@ -73,12 +80,10 @@
                     </h:panelGrid>
                 </p:outputPanel>
             </h:panelGrid>
-            <hr />
+            <br />
         </p:repeat>
-    </h:form>
 
-    <h:form id="userOrders">
-        <p:repeat value="#{orders.ordersInTimeFrame}" var="order">
+        <p:repeat id="userOrders" value="#{orders.ordersInTimeFrame}" var="order" rendered="#{userSession.client}">
             <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
 
                 <p:outputPanel>
@@ -103,15 +108,13 @@
 
                         <h:outputText value="Status:" />
                         <h:outputText value="#{order.status}" style="font-weight: bold"/>
-                        <p:commandButton process="" value="Przejdz do nastepnego statusu"
-                                         action="#{orders.moveToNextStatus(order.status)}" style="zoom: 0.7"/>
                     </h:panelGrid>
                 </p:outputPanel>
             </h:panelGrid>
-            <hr />
+            <br />
         </p:repeat>
     </h:form>
 
 
-</body>
+</h:body>
 </html>

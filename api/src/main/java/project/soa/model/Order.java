@@ -28,6 +28,9 @@ public class Order implements Serializable {
 
     private LocalDateTime ordered_date;
     private LocalDateTime delivery_date;
+
+    @Enumerated(EnumType.STRING)
+    @Basic(fetch = FetchType.EAGER)
     private Status status;
 
     public enum Status { PLACED, PREPARING, PREPARED, DELIVERING, DELIVERED, CANCELED }

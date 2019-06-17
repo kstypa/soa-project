@@ -5,6 +5,7 @@ import project.soa.model.Order;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,8 +15,11 @@ import java.util.List;
 @ViewScoped
 @Data
 public class OrdersView {
-    @EJB(lookup = "java:global/implementation/OrdersController")
+    @EJB(lookup = "java:global/implementation/OrderController")
     IOrderController orderController;
+
+    @ManagedProperty(value = "#{userSession}")
+    private UserSession userSession;
 
     List<Order> allOrders;
 
@@ -43,7 +47,7 @@ public class OrdersView {
         placedOrders=orderController.getAllPlacedOrders();
         preparingOrders=orderController.getAllPreparingOrders();
         preparedOrders=orderController.getAllPreparedOrders();
-        deliveredOrders=orderController.getAllDeliveredOrders();
+        deliveringOrders=orderController.getAllDeliveringOrders();
         deliveredOrders=orderController.getAllDeliveredOrders();
         canceledOrders=orderController.getAllCanceledOrders();
         placedOrPreparingOrders=new ArrayList<>();

@@ -26,6 +26,8 @@
         <h1>Menu</h1>
 
         <p:button value="Strona główna" outcome="index.xhtml" />
+        <p:button value="Menu" outcome="menu.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <p:button value="Zamówienia" outcome="orders.xhtml" rendered="#{index.userSession.loggedIn}" />
         <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!userSession.loggedIn}" />
         <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!userSession.loggedIn}" />
         <br/>
