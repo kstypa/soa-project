@@ -208,6 +208,24 @@ public class OrderController extends AbstractController implements IOrderControl
     }
 
     @Override
+    public List<Order> getOrdersBetweenDates(LocalDateTime date1, LocalDateTime date2)
+    {
+        List<Order> orders = new ArrayList<>();
+        Query query = entityManager.createQuery("from soa_orders where ordered_date between :date1 and :date2", Order.class);
+        query.setParameter("date1", date1);
+        query.setParameter("date2", date2);
+
+        try {
+            orders = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return orders;
+    }
+
+    @Override
     public void deleteOrder(Order order) {
         try {
             entityManager.getTransaction().begin();

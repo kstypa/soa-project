@@ -37,5 +37,7 @@ public interface IOrderController {
 
     public void cancelOrder(Order order);
 
+    public List<Order> getOrdersBetweenDates(LocalDateTime date1, LocalDateTime date2);
+
     public void deleteOrder(Order order);
 }

@@ -11,6 +11,8 @@ public interface IDishController {
 
     public List<Dish> getDishesByCategory(Category category);
 
+    public List<Dish> getDishesByCategoryName(String categoryName);
+
     public Dish getDish(int id);
 
     public Dish getDish(String name);
