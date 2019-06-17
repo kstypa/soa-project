@@ -8,12 +8,16 @@ import project.soa.model.Order;
 import project.soa.model.User;
 
 import javax.ejb.EJB;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Stateless
+@Remote(IOrderController.class)
 public class OrderController extends AbstractController implements IOrderController {
     private DishController dishController = new DishController();
 
@@ -211,7 +215,7 @@ public class OrderController extends AbstractController implements IOrderControl
     public List<Order> getOrdersBetweenDates(LocalDateTime date1, LocalDateTime date2)
     {
         List<Order> orders = new ArrayList<>();
-        Query query = entityManager.createQuery("from soa_orders where ordered_date between :date1 and :date2", Order.class);
+        Query query = entityManager.createQuery("from soa_orders where ordered_date > :date1 and ordered_date < :date2", Order.class);
         query.setParameter("date1", date1);
         query.setParameter("date2", date2);
 

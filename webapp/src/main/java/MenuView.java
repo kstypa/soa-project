@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class MenuView {
 
     @EJB(lookup = "java:global/implementation/CategoryController")
     private ICategoryController categoryController;
+
+    @ManagedProperty(value = "#{userSession}")
+    private UserSession userSession;
 
     private List<Dish> dishes;
     private List<Dish> archivedDishes;

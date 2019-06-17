@@ -4,10 +4,14 @@ import project.soa.api.IAddressController;
 import project.soa.model.Address;
 import project.soa.model.User;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+@Stateless
+@Remote(IAddressController.class)
 public class AddressController extends AbstractController implements IAddressController {
     @Override
     public List<Address> getAllAddresses() {

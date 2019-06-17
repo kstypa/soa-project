@@ -3,6 +3,8 @@ package project.soa.controller;
 import project.soa.api.ISubscriptionController;
 import project.soa.model.*;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import java.time.DayOfWeek;
@@ -10,6 +12,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Stateless
+@Remote(ISubscriptionController.class)
 public class SubscriptionController extends AbstractController implements ISubscriptionController {
     @Override
     public List<Subscription> getAllSubscriptions() {

@@ -4,13 +4,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Rejestracja</title>
 </h:head>
 <h:body>
     <h:form id="form">
+        <p:panelGrid columns="2">
+            <p:outputLabel value="Login: " for="login" />
+            <p:inputText id="login" value="#{registerView.login}" />
 
+            <p:outputLabel value="Hasło: " for="password" />
+            <p:inputText id="password" type="password" value="#{registerView.password}" />
+
+            <p:outputLabel value="Imię: " for="firstName" />
+            <p:inputText id="firstName" value="#{registerView.firstName}" />
+
+            <p:outputLabel value="Nazwisko: " for="lastName" />
+            <p:inputText id="lastName" value="#{registerView.lastName}" />
+
+            <p:commandButton type="submit" value="Wyślij" action="#{registerView.register}" />
+        </p:panelGrid>
+        <h:outputText value="#{registerView.message}" />
     </h:form>
 </h:body>
 </html>

@@ -10,36 +10,36 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Locale;
 
-@Path("courses")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Path("dishes")
 public class MenuData {
-    @EJB(lookup = "java:global/core/CourseService")
+    @EJB(lookup = "java:global/implementation/DishController")
     private IDishController DishController;
 
     @GET
-    @Path("/category/{categoryName}")
-    @Produces("application/json")
-    public List<Dish> queryAllDishesByCategoryName(@Context HttpServletRequest request, @PathParam("categoryName") String categoryName) {
+    @Path("/{categoryName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response queryAllDishesByCategoryName(@Context HttpServletRequest request, @PathParam("categoryName") String categoryName) {
         Locale requestLocale = request.getLocale();
         Category category = new Category();
         category.setName(categoryName);
         List<Dish> ret = DishController.getDishesByCategoryName(categoryName);
         System.out.println(requestLocale);
         ret = Translator.translateCourses(ret, requestLocale);
-        return ret;
+        return Response.ok(ret).build();
     }
 
     @GET
-    @Path("/category/")
-    public List<Dish> queryAllCategories(@Context HttpServletRequest request) {
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response queryAllDishes(@Context HttpServletRequest request) {
         Locale requestLocale = request.getLocale();
         List<Dish> ret = DishController.getAllNotArchivedAndApprovedDishes();
         System.out.println(requestLocale);
         ret = Translator.translateCourses(ret, requestLocale);
-        return ret;
+        return Response.ok(ret).build();
     }
 }
