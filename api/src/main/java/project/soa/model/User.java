@@ -19,6 +19,9 @@ public class User implements Serializable {
     private String password;
     private String first_name;
     private String last_name;
+
+    @Enumerated(EnumType.STRING)
+    @Basic(fetch = FetchType.EAGER)
     private Role role;
 
     public enum Role { MANAGER, CLIENT, COOK, DELIVERY_BOY }

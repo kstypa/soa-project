@@ -4,10 +4,14 @@ import com.google.common.hash.Hashing;
 import project.soa.api.IAccountController;
 import project.soa.model.User;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import java.nio.charset.StandardCharsets;
 
+@Stateless
+@Remote(IAccountController.class)
 public class AccountController extends AbstractController implements IAccountController {
     @Override
     public User addUser(String login, String password, String firstName, String lastName) {

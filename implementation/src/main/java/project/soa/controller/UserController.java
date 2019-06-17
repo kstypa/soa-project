@@ -5,11 +5,15 @@ import project.soa.model.Dish;
 import project.soa.model.Order;
 import project.soa.model.User;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+@Stateless
+@Remote(IUserController.class)
 public class UserController extends AbstractController implements IUserController {
     @Override
     public List<User> getAllUsers() {

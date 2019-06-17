@@ -12,10 +12,13 @@
 <h:body>
    <h1>Catering</h1>
    <h:form id="form">
-      <p:button value="Menu" outcome="menu.xhtml" />
-      <p:button value="Logowanie" outcome="login.xhtml" />
-      <p:button value="Rejestracja" outcome="register.xhtml" />
+      <p:button value="Menu" outcome="menu.xhtml" rendered="#{index.userSession.loggedIn}" />
+      <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!index.userSession.loggedIn}" />
+      <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!index.userSession.loggedIn}" />
+      <p:commandButton value="Wyloguj" type="submit" action="#{index.logout}" rendered="#{index.userSession.loggedIn}" />
       <br/><br/>
+
+      <h:outputText value="#{index.message}" /><br/><br/>
 
       <p:dataTable id="topTable" value="#{index.topDishes}" var="dish">
          <f:facet name="header">

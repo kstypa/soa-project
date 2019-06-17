@@ -26,14 +26,16 @@
         <h1>Menu</h1>
 
         <p:button value="Strona główna" outcome="index.xhtml" />
+        <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!userSession.loggedIn}" />
+        <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!userSession.loggedIn}" />
         <br/>
         <br/>
-        <p:button value="Pokaż wszystkie pozycje" outcome="menu.xhtml" />
+        <p:button value="Pokaż wszystkie pozycje" outcome="menu.xhtml" rendered="#{userSession.loggedIn}"/>
         <br/>
         <br/>
-        <h:outputText id="dishesMessage" value="#{menu.dishesMessage}" />
+        <h:outputText id="dishesMessage" value="#{menu.dishesMessage}" rendered="#{userSession.loggedIn}"/>
 
-        <h:panelGrid columns="2" styleClass="pg">
+        <h:panelGrid columns="2" styleClass="pg" rendered="#{userSession.loggedIn}">
             <p:panel id="panel1" styleClass="pg">
                 <p:menu toggleable="true" model="#{menu.categoryMenuModel}" />
             </p:panel>
@@ -65,13 +67,13 @@
                     </p:column>
 
                     <p:column headerText="Akcje" style="width: 10em">
-                        <p:commandButton process="menuTable" value="Edytuj" oncomplete="PF('editMenuDialog').show()"
+                        <p:commandButton process="menuTable" value="Edytuj" oncomplete="PF('editMenuDialog').show()" rendered="#{userSession.manager}"
                                          action="#{menu.startEdit(dish.id, dish.name, dish.category, dish.price, dish.size)}" style="zoom: 0.7"
                                          update=":form:edit"/>
-                        <p:commandButton process="menuTable" value="Archiwizuj" rendered="#{!dish.archived}"
+                        <p:commandButton process="menuTable" value="Archiwizuj" rendered="#{userSession.manager}"
                                          action="#{menu.archiveDish(dish)}" style="zoom: 0.7"
                                          update=":form:menuTable, :form:archiveTable, :form:growl"/>
-                        <p:commandButton process="menuTable" value="Dodaj do koszyka"
+                        <p:commandButton process="menuTable" value="Dodaj do koszyka" rendered="#{userSession.client}"
                                          action="#{menu.addToCart(dish)}" style="zoom: 0.7"
                                          update=":form:menuTable, :form:growl"/>
                     </p:column>
@@ -87,13 +89,11 @@
 
         <br/><br/>
 
-        <h2>Zarchiwizowane pozycje menu</h2>
-
         <p:dataTable id="archiveTable" value="#{menu.archivedDishes}" var="dish" widgetVar="archiveTableVar"
-                     selection="#{menu.selectedArchivedDishes}" rowKey="#{dish.id}" class="dt">
+                     selection="#{menu.selectedArchivedDishes}" rowKey="#{dish.id}" class="dt" rendered="#{userSession.manager}">
 
             <f:facet name="header">
-                <h:outputText value="Menu" />
+                <h:outputText value="Zarchiwizowane pozycje menu" />
             </f:facet>
 
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
