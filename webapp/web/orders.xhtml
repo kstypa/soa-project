@@ -83,7 +83,7 @@
             <br />
         </p:repeat>
 
-        <p:repeat id="userOrders" value="#{orders.ordersInTimeFrame}" var="order" rendered="#{userSession.client}">
+        <p:repeat id="userOrders" value="#{orders.ordersInTimeFrameForUser}" var="order" rendered="#{userSession.client}">
             <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
 
                 <p:outputPanel>
