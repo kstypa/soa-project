@@ -23,6 +23,9 @@
     <h:form id="form">
         <h1>Menu</h1>
 
+        <p:button value="Strona główna" outcome="index.xhtml" />
+        <br/>
+        <br/>
         <p:button value="Pokaż wszystkie pozycje" outcome="menu.xhtml" />
         <br/>
         <br/>
@@ -33,11 +36,15 @@
                 <p:menu toggleable="true" model="#{menu.categoryMenuModel}" />
             </p:panel>
             <p:panel id="panel2" styleClass="pg">
-                <p:dataTable id="menuTable" value="#{menu.dishes}" var="dish">
+
+                <p:dataTable id="menuTable" value="#{menu.dishes}" var="dish" widgetVar="menuTableVar"
+                             selection="#{menu.selectedDishes}" rowKey="#{dish.id}" class="dt">
 
                     <f:facet name="header">
                         <h:outputText value="Menu" />
                     </f:facet>
+
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
                     <p:column headerText="ID">
                         <h:outputText value="#{dish.id}" />
@@ -55,9 +62,79 @@
                         <h:outputText value="#{dish.size}" />
                     </p:column>
 
+                    <p:column headerText="Edytuj" style="width: 5em">
+                        <p:commandButton process="menuTable" value="Edytuj" oncomplete="PF('editMenuDialog').show()"
+                                         action="#{menu.startEdit(dish.id, dish.name, dish.category, dish.price, dish.size)}" style="zoom: 0.7"
+                                         update=":form:edit"/>
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton process="menuTable" value="Dodaj rekord" oncomplete="PF('addMenuDialog').show()" />
+                        <p:commandButton process="menuTable" update="menuTable, :form:menuTable" value="Usuń wybrane rekordy" action="#{menu.deleteSelectedDishes}" />
+                    </f:facet>
+
                 </p:dataTable>
             </p:panel>
         </h:panelGrid>
+
+        <p:dialog header="Dodaj produkt" widgetVar="addMenuDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="500">
+            <h:panelGrid columns="3" id="addnew">
+                <h:outputLabel for="name">Nazwa: </h:outputLabel>
+                <p:inputText value="#{menu.newName}" id="name" required="true" requiredMessage="Pole jest wymagane"/>
+                <h:message for="name" id="nameMessage" style="color: red" />
+
+                <h:outputLabel for="category">Kategoria: </h:outputLabel>
+                <p:selectOneMenu id="category" value="#{menu.newCategory}" converter="omnifaces.SelectItemsConverter"
+                                 required="true" requiredMessage="Pole jest wymagane">
+                    <f:selectItem itemLabel="Wybierz" itemValue="#{null}" />
+                    <f:selectItems value="#{menu.editCategories}" var="category" itemLabel="#{category.name}" itemValue="#{category}" />
+                </p:selectOneMenu>
+                <h:message for="category" id="categoryMessage" style="color: red" />
+
+                <h:outputLabel for="price">Cena: </h:outputLabel>
+                <p:inputText value="#{menu.newPrice}" id="price" required="true" requiredMessage="Pole jest wymagane" validatorMessage="Podaj liczbę od 0.00 do 99999.99">
+                    <f:validateDoubleRange for="price" minimum="0.00" maximum="99999.99" />
+                </p:inputText>
+                <h:message for="price" id="priceMessage" style="color: red" />
+
+                <h:outputLabel for="size">Rozmiar porcji: </h:outputLabel>
+                <p:inputText value="#{menu.newSize}" id="size" required="true" requiredMessage="Pole jest wymagane"/>
+                <h:message for="size" id="sizeMessage" style="color: red" />
+
+                <p:commandButton process="addnew" value="Dodaj" action="#{menu.addDish}"
+                                 update=":form:menuTable, nameMessage, categoryMessage, priceMessage, sizeMessage" />
+            </h:panelGrid>
+        </p:dialog>
+
+        <p:dialog header="Edytuj produkt" widgetVar="editMenuDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="500">
+            <h:panelGrid columns="3" id="edit">
+                <h:outputLabel for="ename">Nazwa: </h:outputLabel>
+                <p:inputText value="#{menu.editName}" id="ename" required="true" requiredMessage="Pole jest wymagane"/>
+                <h:message for="ename" id="enameMessage" style="color: red" />
+
+                <h:outputLabel for="ecategory">Kategoria: </h:outputLabel>
+                <p:selectOneMenu id="ecategory" value="#{menu.editCategory}" converter="omnifaces.SelectItemsConverter"
+                                 required="true" requiredMessage="Pole jest wymagane">
+                    <f:selectItem itemLabel="Wybierz" itemValue="#{null}" />
+                    <f:selectItems value="#{menu.editCategories}" var="author" itemLabel="#{category.name}" itemValue="#{category}" />
+                </p:selectOneMenu>
+                <h:message for="ecategory" id="ecategoryMessage" style="color: red" />
+
+                <h:outputLabel for="eprice">Cena: </h:outputLabel>
+                <p:inputText value="#{menu.editPrice}" id="eprice" required="true" requiredMessage="Pole jest wymagane" validatorMessage="Podaj liczbę od 0.00 do 99999.99">
+                    <f:validateDoubleRange for="price" minimum="0.00" maximum="99999.99" />
+                </p:inputText>
+                <h:message for="eprice" id="epriceMessage" style="color: red" />
+
+                <h:outputLabel for="esize">Rozmiar porcji: </h:outputLabel>
+                <p:inputText value="#{menu.editSize}" id="esize" required="true" requiredMessage="Pole jest wymagane"/>
+                <h:message for="esize" id="esizeMessage" style="color: red" />
+
+                <p:commandButton process="edit" value="Wyślij" action="#{menu.editDish}"
+                                 update=":form:menuTable, enameMessage, ecategoryMessage, epriceMessage, esizeMessage"
+                                 oncomplete="PF('editMenuDialog').hide()" />
+            </h:panelGrid>
+        </p:dialog>
 
     </h:form>
 

@@ -37,9 +37,13 @@ public interface IDishController {
 
     public List<Dish> getTop10Dishes();
 
-    public List<Dish> getAllArchivedDishes();
+    public List<Dish> getAllArchivedAndApprovedDishes();
 
-    public List<Dish> getAllNotArchivedDishes();
+    public List<Dish> getArchivedAndApprovedDishesByCategory(Category category);
+
+    public List<Dish> getAllNotArchivedAndApprovedDishes();
+
+    public List<Dish> getNotArchivedAndApprovedDishesByCategory(Category category);
 
     public List<Dish> getAllTodayDishes();
 

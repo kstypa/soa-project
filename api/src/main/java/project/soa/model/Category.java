@@ -17,4 +17,8 @@ public class Category implements Serializable {
 
     private int parent_id;
     private String name;
+
+    public String toString() {
+        return "Category[" + id + ";" + parent_id + ";" + name + "]";
+    }
 }

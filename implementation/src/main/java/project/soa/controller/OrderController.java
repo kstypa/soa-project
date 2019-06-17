@@ -229,7 +229,7 @@ public class OrderController extends AbstractController implements IOrderControl
     public void deleteOrder(Order order) {
         try {
             entityManager.getTransaction().begin();
-            entityManager.remove(order);
+            entityManager.remove(entityManager.contains(order) ? order : entityManager.merge(order));
             entityManager.getTransaction().commit();
         }
         catch (Exception e) {

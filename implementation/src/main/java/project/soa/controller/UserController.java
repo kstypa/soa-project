@@ -109,7 +109,7 @@ public class UserController extends AbstractController implements IUserControlle
     public void deleteUser(User user) {
         try {
             entityManager.getTransaction().begin();
-            entityManager.remove(user);
+            entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
             entityManager.getTransaction().commit();
         }
         catch (Exception e) {

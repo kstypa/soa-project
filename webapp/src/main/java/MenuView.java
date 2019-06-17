@@ -10,15 +10,16 @@ import project.soa.model.Dish;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.el.ExpressionFactory;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @ManagedBean(name = "menu")
-@RequestScoped
+@ViewScoped
 @Data
 public class MenuView {
 
@@ -30,6 +31,8 @@ public class MenuView {
 
     private List<Dish> dishes;
     private List<Category> categories;
+    private List<Category> editCategories;
+    private List<Dish> selectedDishes;
 
     private MenuModel categoryMenuModel;
     private int selectedCategoryId;
@@ -37,13 +40,23 @@ public class MenuView {
 
     private String dishesMessage;
 
-    private ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
+    private String newName;
+    private Category newCategory;
+    private double newPrice;
+    private String newSize;
+
+    private int editId;
+    private String editName;
+    private Category editCategory;
+    private double editPrice;
+    private String editSize;
 
     @PostConstruct
     private void init() {
         // categories
         categoryMenuModel = new DefaultMenuModel();
         categories = categoryController.getAllCategories();
+        editCategories = new ArrayList<>();
         selectedCategoryId = -1;
         counter = 0;
 
@@ -58,14 +71,7 @@ public class MenuView {
         }
 
         // dishes
-        if (selectedCategoryId == -1) {
-            dishes = dishController.getAllDishes();
-            dishesMessage = "Wybierz kategorię z listy";
-        }
-        else {
-            dishes = dishController.getDishesByCategory(categoryController.getCategory(selectedCategoryId));
-            dishesMessage = "";
-        }
+        refreshDishes();
     }
 
     private void addCategoriesToTable() {
@@ -73,6 +79,9 @@ public class MenuView {
             if (category.getParent_id() == 0) {
                 DefaultSubMenu item = PrepareSubMenu(category);
                 categoryMenuModel.addElement(item);
+            }
+            else {
+                editCategories.add(category);
             }
         }
     }
@@ -93,5 +102,48 @@ public class MenuView {
             }
         }
         return item;
+    }
+
+    private void refreshDishes() {
+        if (selectedCategoryId == -1) {
+            dishes = dishController.getAllNotArchivedAndApprovedDishes();
+            dishesMessage = "Wybierz kategorię z listy";
+        }
+        else {
+            dishes = dishController.getNotArchivedAndApprovedDishesByCategory(categoryController.getCategory(selectedCategoryId));
+            dishesMessage = "";
+        }
+    }
+
+    public void addDish() {
+        dishController.addDish(newName, newPrice, newCategory, newSize, true);
+        refreshDishes();
+    }
+
+    public void deleteSelectedDishes() {
+        for (var dish : selectedDishes) {
+            dishController.deleteDish(dish);
+        }
+        refreshDishes();
+    }
+
+    public void startEdit(int id, String name, Category category, double price, String size) {
+        editId = id;
+        editName = name;
+        editCategory = category;
+        editPrice = price;
+        editSize = size;
+    }
+
+    public void editDish() {
+        Dish edited = new Dish();
+        for (var dish : dishes) {
+            if (dish.getId() == editId) {
+                edited = dish;
+                break;
+            }
+        }
+        dishController.editDish(edited, editName, editPrice, editCategory, editSize, true, edited.isArchived(), edited.isToday(), edited.getTimes_ordered());
+        refreshDishes();
     }
 }

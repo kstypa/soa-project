@@ -90,7 +90,7 @@ public class CategoryController extends AbstractController implements ICategoryC
     public void deleteCategory(Category category) {
         try {
             entityManager.getTransaction().begin();
-            entityManager.remove(category);
+            entityManager.remove(entityManager.contains(category) ? category : entityManager.merge(category));
             entityManager.getTransaction().commit();
         }
         catch (Exception e) {
