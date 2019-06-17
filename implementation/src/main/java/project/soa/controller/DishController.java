@@ -1,6 +1,5 @@
 package project.soa.controller;
 
-import clojure.lang.IFn;
 import project.soa.api.IDishController;
 import project.soa.model.Category;
 import project.soa.model.Dish;
@@ -33,7 +32,7 @@ public class DishController extends AbstractController implements IDishControlle
     @Override
     public List<Dish> getDishesByCategory(Category category) {
         List<Dish> dishes = new ArrayList<>();
-        Query query = entityManager.createQuery("from soa_dishes where category = :category", Dish.class);
+        Query query = entityManager.createQuery("from soa_dishes where category = :category and approved = true", Dish.class);
         query = query.setParameter("category", category);
 
         try {
@@ -167,22 +166,9 @@ public class DishController extends AbstractController implements IDishControlle
         editDish(dish,dish.getName(),dish.getPrice(),dish.getCategory(),dish.getSize(),dish.isApproved(),false,dish.isToday(),dish.getTimes_ordered());
     }
 
-
-    class DishComparator implements Comparator<Dish>
-    {
-        @Override
-        public int compare(Dish o1, Dish o2) {
-            if(o1.getTimes_ordered() < o2.getTimes_ordered()){
-                return 1;
-            } else {
-                return -1;
-            }
-        }
-    }
-
     @Override
     public List<Dish> getTop10Dishes() {
-        ArrayList<Dish> allDishes= new ArrayList(getAllNotArchivedDishes());
+        ArrayList<Dish> allDishes= new ArrayList(getAllNotArchivedAndApprovedDishes());
         Collections.sort(allDishes,new DishComparator());
         ArrayList<Dish> result = new ArrayList<Dish>();
         for (int i=0;i<10;i++)
@@ -193,10 +179,10 @@ public class DishController extends AbstractController implements IDishControlle
     }
 
     @Override
-    public List<Dish> getAllArchivedDishes()
+    public List<Dish> getAllArchivedAndApprovedDishes()
     {
         List<Dish> dishes = new ArrayList<>();
-        Query query = entityManager.createQuery("from soa_dishes where archived = true", Dish.class);
+        Query query = entityManager.createQuery("from soa_dishes where archived = true and approved = true", Dish.class);
 
 
         try {
@@ -210,11 +196,43 @@ public class DishController extends AbstractController implements IDishControlle
     }
 
     @Override
-    public List<Dish> getAllNotArchivedDishes()
+    public List<Dish> getArchivedAndApprovedDishesByCategory(Category category) {
+        List<Dish> dishes = new ArrayList<>();
+        Query query = entityManager.createQuery("from soa_dishes where category = :category and archived = true and approved = true", Dish.class);
+        query = query.setParameter("category", category);
+
+        try {
+            dishes = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return dishes;
+    }
+
+    @Override
+    public List<Dish> getAllNotArchivedAndApprovedDishes()
     {
         List<Dish> dishes = new ArrayList<>();
-        Query query = entityManager.createQuery("from soa_dishes where archived = false", Dish.class);
+        Query query = entityManager.createQuery("from soa_dishes where archived = false and approved = true", Dish.class);
 
+
+        try {
+            dishes = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return dishes;
+    }
+
+    @Override
+    public List<Dish> getNotArchivedAndApprovedDishesByCategory(Category category) {
+        List<Dish> dishes = new ArrayList<>();
+        Query query = entityManager.createQuery("from soa_dishes where category = :category and archived = false and approved = true", Dish.class);
+        query = query.setParameter("category", category);
 
         try {
             dishes = query.getResultList();
@@ -230,7 +248,7 @@ public class DishController extends AbstractController implements IDishControlle
     public List<Dish> getAllTodayDishes()
     {
         List<Dish> dishes = new ArrayList<>();
-        Query query = entityManager.createQuery("from soa_dishes where today = true and archived=false and approved = true", Dish.class);
+        Query query = entityManager.createQuery("from soa_dishes where today = true and archived = false and approved = true", Dish.class);
 
 
         try {
@@ -252,13 +270,29 @@ public class DishController extends AbstractController implements IDishControlle
     public void deleteDish(Dish dish) {
         try {
             entityManager.getTransaction().begin();
-            entityManager.remove(dish);
+            entityManager.remove(entityManager.contains(dish) ? dish : entityManager.merge(dish));
             entityManager.getTransaction().commit();
         }
         catch (Exception e) {
             System.out.println("error deleting");
+            e.printStackTrace();
         }
     }
 
+    class DishComparator implements Comparator<Dish>
+    {
+        @Override
+        public int compare(Dish o1, Dish o2) {
+            if (o1.getTimes_ordered() < o2.getTimes_ordered()){
+                return 1;
+            }
+            else if (o1.getTimes_ordered() == o2.getTimes_ordered()) {
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+    }
 }
 

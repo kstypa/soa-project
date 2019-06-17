@@ -108,7 +108,7 @@ public class SubscriptionController extends AbstractController implements ISubsc
     public void deleteSubscription(Subscription subscription) {
         try {
             entityManager.getTransaction().begin();
-            entityManager.remove(subscription);
+            entityManager.remove(entityManager.contains(subscription) ? subscription : entityManager.merge(subscription));
             entityManager.getTransaction().commit();
         }
         catch (Exception e) {

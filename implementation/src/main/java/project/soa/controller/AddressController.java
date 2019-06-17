@@ -92,7 +92,7 @@ public class AddressController extends AbstractController implements IAddressCon
     public void deleteAddress(Address address) {
         try {
             entityManager.getTransaction().begin();
-            entityManager.remove(address);
+            entityManager.remove(entityManager.contains(address) ? address : entityManager.merge(address));
             entityManager.getTransaction().commit();
         }
         catch (Exception e) {
