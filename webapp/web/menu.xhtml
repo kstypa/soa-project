@@ -21,6 +21,8 @@
 <h:body>
 
     <h:form id="form">
+        <p:growl id="growl" showDetail="true" sticky="false" life="3000" />
+
         <h1>Menu</h1>
 
         <p:button value="Strona główna" outcome="index.xhtml" />
@@ -46,7 +48,7 @@
 
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
-                    <p:column headerText="ID">
+                    <p:column headerText="ID" style="width: 32px;">
                         <h:outputText value="#{dish.id}" />
                     </p:column>
 
@@ -54,18 +56,24 @@
                         <h:outputText value="#{dish.name}" />
                     </p:column>
 
-                    <p:column headerText="Cena">
+                    <p:column headerText="Cena" style="width: 6em;">
                         <h:outputText value="#{dish.price}" />
                     </p:column>
 
-                    <p:column headerText="Rozmiar porcji">
+                    <p:column headerText="Rozmiar porcji" style="width: 7em;">
                         <h:outputText value="#{dish.size}" />
                     </p:column>
 
-                    <p:column headerText="Edytuj" style="width: 5em">
+                    <p:column headerText="Akcje" style="width: 10em">
                         <p:commandButton process="menuTable" value="Edytuj" oncomplete="PF('editMenuDialog').show()"
                                          action="#{menu.startEdit(dish.id, dish.name, dish.category, dish.price, dish.size)}" style="zoom: 0.7"
                                          update=":form:edit"/>
+                        <p:commandButton process="menuTable" value="Archiwizuj" rendered="#{!dish.archived}"
+                                         action="#{menu.archiveDish(dish)}" style="zoom: 0.7"
+                                         update=":form:menuTable, :form:archiveTable, :form:growl"/>
+                        <p:commandButton process="menuTable" value="Dodaj do koszyka"
+                                         action="#{menu.addToCart(dish)}" style="zoom: 0.7"
+                                         update=":form:menuTable, :form:growl"/>
                     </p:column>
 
                     <f:facet name="footer">
@@ -76,6 +84,47 @@
                 </p:dataTable>
             </p:panel>
         </h:panelGrid>
+
+        <br/><br/>
+
+        <h2>Zarchiwizowane pozycje menu</h2>
+
+        <p:dataTable id="archiveTable" value="#{menu.archivedDishes}" var="dish" widgetVar="archiveTableVar"
+                     selection="#{menu.selectedArchivedDishes}" rowKey="#{dish.id}" class="dt">
+
+            <f:facet name="header">
+                <h:outputText value="Menu" />
+            </f:facet>
+
+            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+            <p:column headerText="ID" style="width: 32px;">
+                <h:outputText value="#{dish.id}" />
+            </p:column>
+
+            <p:column headerText="Nazwa">
+                <h:outputText value="#{dish.name}" />
+            </p:column>
+
+            <p:column headerText="Cena" style="width: 6em;">
+                <h:outputText value="#{dish.price}" />
+            </p:column>
+
+            <p:column headerText="Rozmiar porcji" style="width: 7em;">
+                <h:outputText value="#{dish.size}" />
+            </p:column>
+
+            <p:column headerText="Akcje" style="width: 10em">
+                <p:commandButton process="archiveTable" value="Dearchiwizuj" rendered="#{dish.archived}"
+                                 action="#{menu.dearchiveDish(dish)}" style="zoom: 0.7"
+                                 update=":form:menuTable, :form:archiveTable, :form:growl"/>
+            </p:column>
+
+            <f:facet name="footer">
+                <p:commandButton process="archiveTable" update="archiveTable, :form:archiveTable" value="Usuń wybrane rekordy" action="#{menu.deleteSelectedArchivedDishes}" />
+            </f:facet>
+
+        </p:dataTable>
 
         <p:dialog header="Dodaj produkt" widgetVar="addMenuDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="500">
             <h:panelGrid columns="3" id="addnew">
@@ -102,7 +151,7 @@
                 <h:message for="size" id="sizeMessage" style="color: red" />
 
                 <p:commandButton process="addnew" value="Dodaj" action="#{menu.addDish}"
-                                 update=":form:menuTable, nameMessage, categoryMessage, priceMessage, sizeMessage" />
+                                 update=":form:menuTable, nameMessage, categoryMessage, priceMessage, sizeMessage, :form:growl" />
             </h:panelGrid>
         </p:dialog>
 
@@ -131,7 +180,7 @@
                 <h:message for="esize" id="esizeMessage" style="color: red" />
 
                 <p:commandButton process="edit" value="Wyślij" action="#{menu.editDish}"
-                                 update=":form:menuTable, enameMessage, ecategoryMessage, epriceMessage, esizeMessage"
+                                 update=":form:menuTable, enameMessage, ecategoryMessage, epriceMessage, esizeMessage, :form:growl"
                                  oncomplete="PF('editMenuDialog').hide()" />
             </h:panelGrid>
         </p:dialog>

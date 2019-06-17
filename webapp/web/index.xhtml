@@ -13,6 +13,8 @@
    <h1>Catering</h1>
    <h:form id="form">
       <p:button value="Menu" outcome="menu.xhtml" />
+      <p:button value="Logowanie" outcome="login.xhtml" />
+      <p:button value="Rejestracja" outcome="register.xhtml" />
       <br/><br/>
 
       <p:dataTable id="topTable" value="#{index.topDishes}" var="dish">
@@ -20,20 +22,20 @@
             <h:outputText value="Bestsellery" />
          </f:facet>
 
+         <p:column headerText="Kupiono" style="width: 5em;">
+            <h:outputText value="#{dish.times_ordered}" />
+         </p:column>
+
          <p:column headerText="Nazwa">
             <h:outputText value="#{dish.name}" />
          </p:column>
 
-         <p:column headerText="Kategoria">
+         <p:column headerText="Kategoria" style="width: 10em;">
             <h:outputText value="#{dish.category.name}" />
          </p:column>
 
-         <p:column headerText="Cena">
+         <p:column headerText="Cena" style="width: 6em;">
             <h:outputText value="#{dish.price}" />
-         </p:column>
-
-         <p:column headerText="Kupiono">
-            <h:outputText value="#{dish.times_ordered}" />
          </p:column>
       </p:dataTable>
 

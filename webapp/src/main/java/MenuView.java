@@ -10,8 +10,8 @@ import project.soa.model.Dish;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -30,9 +30,11 @@ public class MenuView {
     private ICategoryController categoryController;
 
     private List<Dish> dishes;
+    private List<Dish> archivedDishes;
     private List<Category> categories;
     private List<Category> editCategories;
     private List<Dish> selectedDishes;
+    private List<Dish> selectedArchivedDishes;
 
     private MenuModel categoryMenuModel;
     private int selectedCategoryId;
@@ -113,11 +115,16 @@ public class MenuView {
             dishes = dishController.getNotArchivedAndApprovedDishesByCategory(categoryController.getCategory(selectedCategoryId));
             dishesMessage = "";
         }
+
+        archivedDishes = dishController.getAllArchivedAndApprovedDishes();
     }
 
     public void addDish() {
         dishController.addDish(newName, newPrice, newCategory, newSize, true);
         refreshDishes();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sukces", "Dodano pozycję " + newName));
     }
 
     public void deleteSelectedDishes() {
@@ -125,6 +132,19 @@ public class MenuView {
             dishController.deleteDish(dish);
         }
         refreshDishes();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sukces", "Usunięto wybrane pozycje"));
+    }
+
+    public void deleteSelectedArchivedDishes() {
+        for (var dish : selectedArchivedDishes) {
+            dishController.deleteDish(dish);
+        }
+        refreshDishes();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sukces", "Usunięto wybrane pozycje"));
     }
 
     public void startEdit(int id, String name, Category category, double price, String size) {
@@ -145,5 +165,32 @@ public class MenuView {
         }
         dishController.editDish(edited, editName, editPrice, editCategory, editSize, true, edited.isArchived(), edited.isToday(), edited.getTimes_ordered());
         refreshDishes();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sukces", "Edytowano pozycję " + editName));
     }
+
+    public void archiveDish(Dish dish) {
+        dishController.setDishArchived(dish);
+        refreshDishes();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sukces", "Zarchiwizowano pozycję " + dish.getName()));
+    }
+
+    public void dearchiveDish(Dish dish) {
+        dishController.setDishNotArchived(dish);
+        refreshDishes();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sukces", "Zdearchiwizowano pozycję " + dish.getName()));
+    }
+
+    public void addToCart(Dish dish) {
+
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sukces", "Dodano pozycję " + dish.getName() + " do koszyka"));
+    }
+
 }
