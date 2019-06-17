@@ -46,6 +46,23 @@ public class DishController extends AbstractController implements IDishControlle
     }
 
     @Override
+    public List<Dish> getDishesByCategoryName(String categoryName)
+    {
+        List<Dish> dishes = new ArrayList<>();
+        Query query = entityManager.createQuery("from soa_dishes where category.name = :categoryName and approved = true", Dish.class);
+        query = query.setParameter("categoryName", categoryName);
+
+        try {
+            dishes = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return dishes;
+    }
+
+    @Override
     public Dish getDish(int id) {
         return entityManager.find(Dish.class, id);
     }
