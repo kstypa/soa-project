@@ -1,10 +1,19 @@
-
-
-import javax.ejb.Singleton;
 import java.util.ArrayList;
 
-@Singleton
 public class OrderStorage {
+    private static OrderStorage instance;
+
+    public static OrderStorage getInstance() {
+        if (instance == null) {
+            instance = new OrderStorage();
+        }
+        return instance;
+    }
+
+    private OrderStorage() {
+
+    }
+
     public ArrayList<String> arrayList = new ArrayList<>();
 
     public ArrayList<String> getArrayList() {

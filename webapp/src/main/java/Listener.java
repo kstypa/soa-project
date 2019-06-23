@@ -16,8 +16,12 @@ import javax.jms.TextMessage;
                 ,propertyValue = "java:jboss/exported/jms/queue/SOA_test")})
 public class Listener implements MessageListener {
 
-    @EJB
+//    @EJB(lookup = "java:global/webapp/OrderStorage")
     OrderStorage orderStorage;
+
+    public Listener() {
+        orderStorage = OrderStorage.getInstance();
+    }
 
     public void onMessage(Message message) {
         TextMessage textMessage=(TextMessage)message;
