@@ -126,4 +126,9 @@ public class OrdersView {
         refresh();
     }
 
+    public void cancelOrder(Order order) {
+        orderController.editOrder(order, order.getUser(), order.getAddress(), order.getDelivery_date(), Order.Status.CANCELED, order.getDishes());
+        getOrdersInTimeFrameForUser(order.getUser());
+    }
+
 }
