@@ -1,5 +1,8 @@
 package project.soa.jms;
 
+import project.soa.model.Order;
+import project.soa.model.User;
+
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,11 +23,9 @@ public class Sender {
     private Queue queue;
 
 
-    public void sendMessage(String message) {
+    public void sendMessage(int userId, int orderId) {
         try {
-            Date date = new Date();
-            String stringMessage = message;
-            send(stringMessage);
+            send(String.valueOf(userId)+"/"+String.valueOf(orderId));
         }catch (Exception e){
             System.out.println("Wystąpił błąd przy wysyłaniu: "+e);
         }
