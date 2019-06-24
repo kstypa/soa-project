@@ -9,7 +9,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean(name = "orders")
@@ -40,9 +42,12 @@ public class OrdersView {
 
     List<Order> preparedOrDeliveringOrders;
 
-    List<Order> ordersInTimeFrame;
+    List<Order> ordersInTimeFrameList;
 
-    List<Order> ordersInTimeFrameForUser;
+    List<Order> ordersInTimeFrameForUserList;
+
+    Date userDate1;
+    Date userDate2;
 
     @PostConstruct
     private void init(){
@@ -71,20 +76,29 @@ public class OrdersView {
 
     public void getOrdersInTimeFrame(LocalDateTime date1, LocalDateTime date2)
     {
-        ordersInTimeFrame=orderController.getOrdersBetweenDates(date1,date2);
+        ordersInTimeFrameList =orderController.getOrdersBetweenDates(date1,date2);
     }
 
-    public void getOrdersInTimeFrameForUser(LocalDateTime date1, LocalDateTime date2,User user)
+    public void getOrdersInTimeFrameForUser(User user)
     {
-        getOrdersInTimeFrame(date1,date2);
-        ordersInTimeFrameForUser=new ArrayList<>();
-        for (Order order: ordersInTimeFrame) {
+        LocalDateTime date1 = convertToLocalDateTimeViaInstant(userDate1);
+        LocalDateTime date2 = convertToLocalDateTimeViaInstant(userDate2);
+
+        getOrdersInTimeFrame(date1, date2);
+        ordersInTimeFrameForUserList = new ArrayList<>();
+        for (Order order: ordersInTimeFrameList) {
             if(order.getUser().equals(user))
             {
-                ordersInTimeFrameForUser.add(order);
+                ordersInTimeFrameForUserList.add(order);
             }
 
         }
+    }
+
+    public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     public void moveToNextStatus(Order order)

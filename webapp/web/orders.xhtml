@@ -92,36 +92,47 @@
             </p:outputPanel>
         </p:repeat>
 
-<!--        <p:repeat id="userOrders" value="#{orders.ordersInTimeFrameForUser}" var="order" rendered="#{userSession.client}">-->
-<!--            <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">-->
+        <p:outputPanel id="userPanel" rendered="#{userSession.client}">
+            <p:outputLabel for="datetime1" value="Od: " />
+            <p:calendar id="datetime1" required="true" value="#{orders.userDate1}" pattern="yyyy-MM-dd HH:mm:ss" /><br/>
+            <p:outputLabel for="datetime2" value="Do: " />
+            <p:calendar id="datetime2" required="true" value="#{orders.userDate2}" pattern="yyyy-MM-dd HH:mm:ss" /><br/>
+            <p:commandButton process="@parent" value="Sprawdź" update="@form"
+                             action="#{orders.getOrdersInTimeFrameForUser(userSession.user)}" />
+            <br/><br/>
+            <p:repeat id="userOrdersList" value="#{orders.ordersInTimeFrameForUserList}" var="order">
+                <p:outputPanel id="userOrder" style="border-bottom: 1px solid black; margin-bottom: 10px;">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputText value="Id:" />
+                        <h:outputText value="#{order.id}" style="font-weight: bold"/>
 
-<!--                <p:outputPanel>-->
-<!--                    <h:panelGrid columns="2" cellpadding="5">-->
-<!--                        <h:outputText value="Id:" />-->
-<!--                        <h:outputText value="#{order.id}" style="font-weight: bold"/>-->
+                        <h:outputText value="Użytkownik:" />
+                        <h:outputText value="#{order.user.first_name} #{order.user.last_name}" style="font-weight: bold"/>
 
-<!--                        <h:outputText value="Użytkownik:" />-->
-<!--                        <h:outputText value="#{order.user}" style="font-weight: bold"/>-->
+                        <h:outputText value="Adres:" />
+                        <p:outputPanel>
+                            <h:outputText value="#{order.address.street} #{order.address.building}/#{order.address.apartment}" style="font-weight: bold"/><br/>
+                            <h:outputText value="#{order.address.postal_code} #{order.address.city}" style="font-weight: bold"/>
+                        </p:outputPanel>
 
-<!--                        <h:outputText value="Adres:" />-->
-<!--                        <h:outputText value="#{order.address}" style="font-weight: bold"/>-->
+                        <h:outputText value="Data zamówienia:" />
+                        <h:outputText value="#{order.ordered_date.toLocalDate()} #{order.ordered_date.toLocalTime()}" style="font-weight: bold"/>
 
-<!--                        <h:outputText value="Data zamówienia:" />-->
-<!--                        <h:outputText value="#{order.ordered_date}" style="font-weight: bold"/>-->
+                        <h:outputText value="Data dostarczenia:" />
+                        <h:outputText value="#{order.delivery_date.toLocalDate()} #{order.delivery_date.toLocalTime()}" style="font-weight: bold"/>
 
-<!--                        <h:outputText value="Data dostarczenia:" />-->
-<!--                        <h:outputText value="#{order.delivery_date}" style="font-weight: bold"/>-->
+                        <h:outputText value="Lista dań:" />
+                        <p:repeat value="#{order.dishes}" var="dish">
+                            <h:outputText value="#{dish.name}" style="font-weight: bold"/><br/>
+                        </p:repeat>
 
-<!--                        <h:outputText value="Lista dań:" />-->
-<!--                        <h:outputText value="#{order.dishes}" style="font-weight: bold"/>-->
+                        <h:outputText value="Status:" />
+                        <h:outputText value="#{order.status}" style="font-weight: bold" id="userOrderStatus"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+            </p:repeat>
+        </p:outputPanel>
 
-<!--                        <h:outputText value="Status:" />-->
-<!--                        <h:outputText value="#{order.status}" style="font-weight: bold"/>-->
-<!--                    </h:panelGrid>-->
-<!--                </p:outputPanel>-->
-<!--            </h:panelGrid>-->
-<!--            <br />-->
-<!--        </p:repeat>-->
     </h:form>
 
 
