@@ -42,4 +42,8 @@ public class Order implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "dish_id")
     )
     private List<Dish> dishes;
+
+    public boolean isCancellable() {
+        return status == Status.PLACED;
+    }
 }
