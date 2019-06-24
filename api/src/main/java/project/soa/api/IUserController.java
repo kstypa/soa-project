@@ -18,5 +18,7 @@ public interface IUserController {
 
     public User editUser(User user, String login, String password, String first_name, String last_name, User.Role role);
 
+    public User editUserRole(User user, User.Role role);
+
     public void deleteUser(User user);
 }

@@ -44,7 +44,7 @@
                         <h:outputText value="#{subscription.ordered_date.toLocalDate()} #{subscription.ordered_date.toLocalTime()}" style="font-weight: bold"/>
 
                         <h:outputText value="Godzina dostarczenia:" />
-                        <h:outputText value="#{subscription.delivery_hour.toLocalTime()}" style="font-weight: bold"/>
+                        <h:outputText value="#{subscription.delivery_hour}" style="font-weight: bold"/>
 
                         <h:outputText value="Dzień dostarczenia:" />
                         <h:outputText value="#{subscription.delivery_day}" style="font-weight: bold"/>
@@ -59,6 +59,8 @@
                     </h:panelGrid>
                 </p:outputPanel>
             </p:repeat>
+
+            <br/><br/>
 
             <h:panelGroup id="alert" style="margin-top: 20px" rendered="#{userSession.client}">
                 <p:poll interval="2" listener="#{userView.orderStorage.arrayList}" update="notifications" />

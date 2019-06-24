@@ -32,9 +32,11 @@ public class Subscription implements Serializable {
 
     private LocalTime delivery_hour;
 
+    @Enumerated(EnumType.STRING)
+    @Basic(fetch = FetchType.EAGER)
     private DayOfWeek delivery_day;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "soa_subscription_contents",
             joinColumns = @JoinColumn(name = "subscription_id"),

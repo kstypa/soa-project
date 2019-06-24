@@ -3,8 +3,10 @@ import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import project.soa.api.ICartController;
 import project.soa.api.ICategoryController;
 import project.soa.api.IDishController;
+import project.soa.model.Address;
 import project.soa.model.Category;
 import project.soa.model.Dish;
 
@@ -15,7 +17,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +35,8 @@ public class MenuView {
     @EJB(lookup = "java:global/implementation/CategoryController")
     private ICategoryController categoryController;
 
-    private CartView cartView;
+    @EJB(lookup = "java:global/implementation/CartController")
+    private ICartController cartController;
 
     @ManagedProperty(value = "#{userSession}")
     private UserSession userSession;
@@ -58,6 +64,12 @@ public class MenuView {
     private Category editCategory;
     private double editPrice;
     private String editSize;
+
+    // cart
+    private List<Address> addresses;
+    private int selectedAddressId;
+    private List<Dish> orderDishes;
+    private Date deliveryDate;
 
     @PostConstruct
     private void init() {
@@ -193,11 +205,37 @@ public class MenuView {
     }
 
     public void addToCart(Dish dish) {
-
-
+        cartController.addDish(dish);
         FacesContext context = FacesContext.getCurrentInstance();
-        cartView.addDish(dish);
         context.addMessage(null, new FacesMessage("Sukces", "Dodano pozycję " + dish.getName() + " do koszyka"));
     }
 
+    public void subscribeCart()
+    {
+        LocalDateTime deliveryDateTime = convertToLocalDateTimeViaInstant(deliveryDate);
+        cartController.subscribe(userSession.getUser(), selectedAddressId, deliveryDateTime);
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Zasubskrybowano"));
+    }
+
+    public void orderCart()
+    {
+        LocalDateTime deliveryDateTime = convertToLocalDateTimeViaInstant(deliveryDate);
+        cartController.order(userSession.getUser(), selectedAddressId, deliveryDateTime);
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Zamówienie złożone"));
+    }
+
+    public void refreshCart() {
+        addresses = userSession.getAllAddresses(userSession.getUser());
+        orderDishes = cartController.getDishes();
+    }
+
+    public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
 }

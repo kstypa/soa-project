@@ -84,6 +84,8 @@
                     <f:facet name="footer">
                         <p:commandButton rendered="#{userSession.manager}" process="menuTable" value="Dodaj rekord" oncomplete="PF('addMenuDialog').show()" />
                         <p:commandButton rendered="#{userSession.manager}" process="menuTable" update="menuTable, :form:menuTable" value="Usuń wybrane rekordy" action="#{menu.deleteSelectedDishes}" />
+                        <p:commandButton process="menuTable" value="Koszyk" oncomplete="PF('cartDialog').show()" rendered="#{userSession.client}"
+                                         action="#{menu.refreshCart}" update=":form:cart"/>
                     </f:facet>
 
                 </p:dataTable>
@@ -185,6 +187,32 @@
                 <p:commandButton process="edit" value="Wyślij" action="#{menu.editDish}"
                                  update=":form:menuTable, enameMessage, ecategoryMessage, epriceMessage, esizeMessage, :form:growl"
                                  oncomplete="PF('editMenuDialog').hide()" />
+            </h:panelGrid>
+        </p:dialog>
+
+        <p:dialog header="Koszyk" widgetVar="cartDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="600">
+            <h:panelGrid columns="2" id="cart">
+                <p:outputLabel value="Adres: " for="address" />
+                <p:selectOneMenu id="address" value="#{menu.selectedAddressId}">
+                    <f:selectItem itemLabel="Wybierz" itemValue="" noSelectionOption="false" />
+                    <f:selectItems value="#{userSession.addresses}" var="address" itemValue="#{address.id}" itemLabel="#{address.street} #{address.building}/#{address.apartment}, #{address.postal_code} #{address.city}" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="deliverydate" value="Godzina dostarczenia: " />
+                <p:calendar id="deliverydate" required="true" value="#{menu.deliveryDate}" pattern="yyyy-MM-dd HH:mm:ss" />
+
+                <h:outputText value="Lista dań:" />
+                <h:panelGroup>
+                    <p:repeat value="#{menu.orderDishes}" var="dish">
+                        <h:outputText value="#{dish.name} - #{dish.size} - #{dish.price}" style="font-weight: bold"/><br/>
+                    </p:repeat>
+                </h:panelGroup>
+                <br/><br/>
+                <p:commandButton value="Subskrybuj" process="cart" oncomplete="PF('cartDialog').hide()"
+                                 action="#{menu.subscribeCart}" update=":form:growl" />
+
+                <p:commandButton value="Zamów" process="cart" oncomplete="PF('cartDialog').hide()"
+                                 action="#{menu.orderCart}" update=":form:growl" />
             </h:panelGrid>
         </p:dialog>
 

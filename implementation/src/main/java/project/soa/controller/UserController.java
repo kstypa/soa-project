@@ -110,6 +110,22 @@ public class UserController extends AbstractController implements IUserControlle
     }
 
     @Override
+    public User editUserRole(User user, User.Role role) {
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.detach(user);
+            user.setRole(role);
+            entityManager.merge(user);
+            entityManager.getTransaction().commit();
+        }
+        catch (Exception e) {
+            System.out.println("error editing");
+        }
+
+        return user;
+    }
+
+    @Override
     public void deleteUser(User user) {
         try {
             entityManager.getTransaction().begin();

@@ -26,11 +26,54 @@
         <h:panelGrid rendered="#{userSession.loggedIn}">
 
             <h2>Role użytkowników</h2>
-            <p:dataTable value="#{adminView.users}" var="user">
+            <p:dataTable id="usersTable" value="#{adminView.users}" var="user">
+
+                <f:facet name="header">
+                    <h:outputText value="Użytkownicy" />
+                </f:facet>
+
+                <p:column headerText="ID" style="width: 32px;">
+                    <h:outputText value="#{user.id}" />
+                </p:column>
+
+                <p:column headerText="Login">
+                    <h:outputText value="#{user.login}" />
+                </p:column>
+
+                <p:column headerText="Imię i nazwisko">
+                    <h:outputText value="#{user.first_name} #{user.last_name}" />
+                </p:column>
+
+                <p:column headerText="Rola">
+                    <h:outputText value="#{user.role.name()}" />
+                </p:column>
+
+                <p:column headerText="Edytuj">
+                    <p:commandButton process="usersTable" value="Edytuj" oncomplete="PF('editDialog').show()" rendered="#{userSession.manager}"
+                                     action="#{adminView.startEdit(user.id, user.login, user.role)}" style="zoom: 0.7"
+                                     update=":form:edit"/>
+                </p:column>
 
             </p:dataTable>
 
         </h:panelGrid>
+
+        <p:dialog header="Edytuj rolę" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="500">
+            <h:panelGrid columns="2" id="edit">
+                <h:outputLabel for="ename">Użytkownik: </h:outputLabel>
+                <h:outputText id="ename" value="#{adminView.editLogin}"/>
+
+                <h:outputLabel for="erole">Rola: </h:outputLabel>
+                <p:selectOneMenu id="erole" value="#{adminView.editRoleName}" converter="omnifaces.SelectItemsConverter"
+                                 required="true" requiredMessage="Pole jest wymagane">
+                    <f:selectItems value="#{adminView.roles}" var="role" itemLabel="#{role.name()}" itemValue="#{role.name()}" />
+                </p:selectOneMenu>
+
+                <p:commandButton process="edit" value="Wyślij" action="#{adminView.editRole}"
+                                 update=":form:usersTable"
+                                 oncomplete="PF('editDialog').hide()" />
+            </h:panelGrid>
+        </p:dialog>
     </h:form>
 </h:body>
 

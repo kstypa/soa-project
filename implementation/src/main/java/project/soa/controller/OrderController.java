@@ -173,6 +173,7 @@ public class OrderController extends AbstractController implements IOrderControl
         order.setUser(user);
         order.setAddress(address);
         order.setDelivery_date(delivery_date);
+        order.setStatus(Order.Status.PLACED);
         order.setDishes(dishes);
         for(Dish dish: dishes)
         {
