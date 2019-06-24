@@ -51,7 +51,7 @@
                         <h:outputText value="Menu" />
                     </f:facet>
 
-                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column rendered="#{userSession.manager}" selectionMode="multiple" style="width:16px;text-align:center"/>
 
                     <p:column headerText="ID" style="width: 32px;">
                         <h:outputText value="#{dish.id}" />
@@ -82,8 +82,8 @@
                     </p:column>
 
                     <f:facet name="footer">
-                        <p:commandButton process="menuTable" value="Dodaj rekord" oncomplete="PF('addMenuDialog').show()" />
-                        <p:commandButton process="menuTable" update="menuTable, :form:menuTable" value="Usuń wybrane rekordy" action="#{menu.deleteSelectedDishes}" />
+                        <p:commandButton rendered="#{userSession.manager}" process="menuTable" value="Dodaj rekord" oncomplete="PF('addMenuDialog').show()" />
+                        <p:commandButton rendered="#{userSession.manager}" process="menuTable" update="menuTable, :form:menuTable" value="Usuń wybrane rekordy" action="#{menu.deleteSelectedDishes}" />
                     </f:facet>
 
                 </p:dataTable>
