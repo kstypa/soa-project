@@ -16,6 +16,7 @@
         <p:button value="Zamówienia" outcome="orders.xhtml" rendered="#{index.userSession.loggedIn}" />
         <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!userSession.loggedIn}" />
         <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!userSession.loggedIn}" />
+        <p:button value="Panel użytkownika" outcome="user.xhtml" rendered="#{index.userSession.loggedIn}" />
         <br/><br/>
 
         <p:repeat id="cookOrdersList" rendered="#{userSession.cook}" value="#{orders.placedOrPreparingOrders}" var="order">

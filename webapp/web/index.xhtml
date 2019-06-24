@@ -17,6 +17,7 @@
       <p:button value="Zamówienia" outcome="orders.xhtml" rendered="#{index.userSession.loggedIn}" />
       <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!index.userSession.loggedIn}" />
       <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!index.userSession.loggedIn}" />
+      <p:button value="Panel użytkownika" outcome="user.xhtml" rendered="#{index.userSession.loggedIn}" />
       <p:commandButton value="Wyloguj" type="submit" action="#{index.logout}" rendered="#{index.userSession.loggedIn}" />
       <br/><br/>
 

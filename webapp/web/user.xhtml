@@ -8,53 +8,87 @@
 <h:head>
     <title>Panel użytkownika</title>
 </h:head>
-<h:panelGrid>
 
-    <p:repeat id="subscriptionsList" rendered="#{userSession.client}" value="#{subscriptions.getAllSubscriptionsForUser(userSession.user)}" var="subscription">
-        <p:outputPanel id="deliveryBoyOrder" style="border-bottom: 1px solid black; margin-bottom: 10px;">
-            <h:panelGrid columns="2" cellpadding="5">
-                <h:outputText value="Id:" />
-                <h:outputText value="#{subscription.id}" style="font-weight: bold"/>
+<h:body>
+    <h1>Panel użytkownika</h1>
+    <h:form id="form">
+        <p:button value="Strona główna" outcome="index.xhtml" />
+        <p:button value="Menu" outcome="menu.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <p:button value="Zamówienia" outcome="orders.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!index.userSession.loggedIn}" />
+        <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!index.userSession.loggedIn}" />
+        <p:button value="Panel użytkownika" outcome="user.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <br/><br/>
+        <h2>#{userSession.user.first_name} #{userSession.user.last_name} (#{userSession.user.login})</h2>
 
-                <h:outputText value="Użytkownik:" />
-                <h:outputText value="#{subscription.user.first_name} #{subscription.user.last_name}" style="font-weight: bold"/>
+        <h:outputText value="#{userView.message}" /><br/>
 
-                <h:outputText value="Adres:" />
-                <p:outputPanel>
-                    <h:outputText value="#{subscription.address.street} #{subscription.address.building}/#{subscription.address.apartment}" style="font-weight: bold"/><br/>
-                    <h:outputText value="#{subscription.address.postal_code} #{subscription.address.city}" style="font-weight: bold"/>
+        <h:panelGrid>
+            <h3>Subskrypcje</h3>
+            <p:repeat id="subscriptionsList" rendered="#{userSession.client}" value="#{subscriptions.getAllSubscriptionsForUser(userSession.user)}" var="subscription">
+                <p:outputPanel id="deliveryBoyOrder" style="border-bottom: 1px solid black; margin-bottom: 10px;">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputText value="Id:" />
+                        <h:outputText value="#{subscription.id}" style="font-weight: bold"/>
+
+                        <h:outputText value="Użytkownik:" />
+                        <h:outputText value="#{subscription.user.first_name} #{subscription.user.last_name}" style="font-weight: bold"/>
+
+                        <h:outputText value="Adres:" />
+                        <p:outputPanel>
+                            <h:outputText value="#{subscription.address.street} #{subscription.address.building}/#{subscription.address.apartment}" style="font-weight: bold"/><br/>
+                            <h:outputText value="#{subscription.address.postal_code} #{subscription.address.city}" style="font-weight: bold"/>
+                        </p:outputPanel>
+
+                        <h:outputText value="Data zamówienia:" />
+                        <h:outputText value="#{subscription.ordered_date.toLocalDate()} #{subscription.ordered_date.toLocalTime()}" style="font-weight: bold"/>
+
+                        <h:outputText value="Godzina dostarczenia:" />
+                        <h:outputText value="#{subscription.delivery_hour.toLocalTime()}" style="font-weight: bold"/>
+
+                        <h:outputText value="Dzień dostarczenia:" />
+                        <h:outputText value="#{subscription.delivery_day}" style="font-weight: bold"/>
+
+                        <h:outputText value="Lista dań:" />
+                        <p:repeat value="#{subscription.dishes}" var="dish">
+                            <h:outputText value="#{dish.name}" style="font-weight: bold"/><br/>
+                        </p:repeat>
+
+                        <p:commandButton process="@parent" value="Usuń subskrypcje"
+                                         action="#{subscriptions.cancelSubscription(subscription)}" style="zoom: 0.7" update="@form" />
+                    </h:panelGrid>
                 </p:outputPanel>
+            </p:repeat>
 
-                <h:outputText value="Data zamówienia:" />
-                <h:outputText value="#{subscription.ordered_date.toLocalDate()} #{subscription.ordered_date.toLocalTime()}" style="font-weight: bold"/>
+            <h:panelGroup id="alert" style="margin-top: 20px" rendered="#{userSession.client}">
+                <!--<h:form>
+                    <p:poll interval="20" listener="#{userView.orderStorage.arrayList}" />
+                </h:form> -->
+                <p:dataList value="#{userView.allOrderChanges}" var="alert" type="ordered">
+                    <f:facet name="header">
+                        POWIADOMIENIA
+                    </f:facet>
+                    #{alert}
+                </p:dataList>
+            </h:panelGroup>
 
-                <h:outputText value="Godzina dostarczenia:" />
-                <h:outputText value="#{subscription.delivery_hour.toLocalTime()}" style="font-weight: bold"/>
+            <br/><br/>
 
-                <h:outputText value="Dzień dostarczenia:" />
-                <h:outputText value="#{subscription.delivery_day}" style="font-weight: bold"/>
+            <h2>Zmiana hasła</h2>
+            <h:panelGroup id="passwordChange">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="oldPassword" value="Stare hasło: " />
+                    <p:inputText id="oldPassword" type="password" value="#{userView.oldPassword}" required="true" />
+                    <p:outputLabel for="newPassword" value="Nowe hasło: " />
+                    <p:inputText id="newPassword" type="password" value="#{userView.newPassword}" required="true" />
+                    <p:outputLabel for="newPassword2" value="Potwierdź nowe hasło: " />
+                    <p:inputText id="newPassword2" type="password" value="#{userView.newPassword2}" required="true" />
+                    <p:commandButton value="Wyślij" process="@all" ajax="false" action="#{userView.changePassword}" update="@all" />
+                </h:panelGrid>
+            </h:panelGroup>
 
-                <h:outputText value="Lista dań:" />
-                <p:repeat value="#{subscription.dishes}" var="dish">
-                    <h:outputText value="#{dish.name}" style="font-weight: bold"/><br/>
-                </p:repeat>
+        </h:panelGrid>
+    </h:form>
+</h:body>
 
-                <p:commandButton process="@parent" value="Usuń subskrypcje"
-                                 action="#{subscriptions.cancelSubscription(subscription)}" style="zoom: 0.7" update="@form" />
-            </h:panelGrid>
-        </p:outputPanel>
-    </p:repeat>
-        <h:panelGroup id="alert" style="margin-top: 20px" rendered="#{userSession.client}">
-        <!--<h:form>
-            <p:poll interval="20" listener="#{userView.orderStorage.arrayList}" />
-        </h:form> -->
-        <p:dataList value="#{userView.allOrderChanges()}" var="alert" type="ordered">
-            <f:facet name="header">
-                POWIADOMIENIA
-            </f:facet>
-            #{alert}
-        </p:dataList>
-
-        </h:panelGroup>
-</h:panelGrid>
 </html>
