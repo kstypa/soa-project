@@ -3,12 +3,14 @@ import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import project.soa.api.IAddressController;
 import project.soa.api.ICartController;
 import project.soa.api.ICategoryController;
 import project.soa.api.IDishController;
 import project.soa.model.Address;
 import project.soa.model.Category;
 import project.soa.model.Dish;
+import project.soa.model.User;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -38,6 +40,9 @@ public class MenuView {
     @EJB(lookup = "java:global/implementation/CartController")
     private ICartController cartController;
 
+    @EJB(lookup = "java:global/implementation/AddressController")
+    private IAddressController addressController;
+
     @ManagedProperty(value = "#{userSession}")
     private UserSession userSession;
 
@@ -66,7 +71,7 @@ public class MenuView {
     private String editSize;
 
     // cart
-    private List<Address> addresses;
+    private ArrayList<Address> addresses;
     private int selectedAddressId;
     private List<Dish> orderDishes;
     private Date deliveryDate;
@@ -229,7 +234,7 @@ public class MenuView {
     }
 
     public void refreshCart() {
-        addresses = userSession.getAllAddresses(userSession.getUser());
+        addresses = getAllAddresses(userSession.getUser());
         orderDishes = cartController.getDishes();
     }
 
@@ -237,5 +242,10 @@ public class MenuView {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
+    }
+
+    public ArrayList<Address> getAllAddresses(User user) {
+        addresses = (ArrayList<Address>) addressController.getAddressesByUser(user);
+        return addresses;
     }
 }

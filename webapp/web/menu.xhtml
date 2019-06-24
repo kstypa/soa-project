@@ -195,7 +195,7 @@
                 <p:outputLabel value="Adres: " for="address" />
                 <p:selectOneMenu id="address" value="#{menu.selectedAddressId}">
                     <f:selectItem itemLabel="Wybierz" itemValue="" noSelectionOption="false" />
-                    <f:selectItems value="#{userSession.addresses}" var="address" itemValue="#{address.id}" itemLabel="#{address.street} #{address.building}/#{address.apartment}, #{address.postal_code} #{address.city}" />
+                    <f:selectItems value="#{menu.addresses}" var="address" itemValue="#{address.id}" itemLabel="#{address.street} #{address.building}/#{address.apartment}, #{address.postal_code} #{address.city}" />
                 </p:selectOneMenu>
 
                 <p:outputLabel for="deliverydate" value="Godzina dostarczenia: " />

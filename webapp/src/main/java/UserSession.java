@@ -19,28 +19,6 @@ public class UserSession {
 
     private User user;
 
-    ArrayList<Address> addresses;
-
-    private String city;
-    private String street;
-    private String building;
-    private int apartment;
-    private String postal_code;
-
-    @EJB(lookup = "java:global/implementation/AddressController")
-    private IAddressController addressController;
-
-    public ArrayList<Address> getAllAddresses(User user)
-    {
-        addresses=(ArrayList<Address>) addressController.getAddressesByUser(user);
-        return addresses;
-    }
-
-    public void addAddress()
-    {
-        addressController.addAddress(city,street,building,apartment,postal_code,user);
-    }
-
     public boolean isLoggedIn() {
         return user != null;
     }

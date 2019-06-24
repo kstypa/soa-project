@@ -79,16 +79,16 @@
             <h:panelGroup id="addressAdd">
                 <h:panelGrid columns="2">
                     <p:outputLabel for="city" value="Miasto: " />
-                    <p:inputText id="city"  value="#{userSession.city}" required="true" />
+                    <p:inputText id="city"  value="#{userView.city}" required="true" />
                     <p:outputLabel for="street" value="Ulica: " />
-                    <p:inputText id="street" value="#{userSession.street}" required="true" />
+                    <p:inputText id="street" value="#{userView.street}" required="true" />
                     <p:outputLabel for="building" value="Budynek: " />
-                    <p:inputText id="building"  value="#{userSession.building}" required="true" />
+                    <p:inputText id="building"  value="#{userView.building}" required="true" />
                     <p:outputLabel for="apartment" value="Numer mieszkania: " />
-                    <p:inputText id="apartment" value="#{userSession.apartment}" required="true" />
+                    <p:inputText id="apartment" value="#{userView.apartment}" required="true" />
                     <p:outputLabel for="postalcode" value="Kod pocztowy: " />
-                    <p:inputText id="postalcode"  value="#{userSession.postal_code}" required="true" />
-                    <p:commandButton value="Wyślij" process="@all" ajax="false" action="#{userSession.addAddress}" update="@all" />
+                    <p:inputText id="postalcode"  value="#{userView.postal_code}" required="true" />
+                    <p:commandButton value="Wyślij" process=":form:addressAdd" action="#{userView.addAddress}" update="@all" />
                 </h:panelGrid>
             </h:panelGroup>
 
@@ -102,7 +102,7 @@
                     <p:inputText id="newPassword" type="password" value="#{userView.newPassword}" required="true" />
                     <p:outputLabel for="newPassword2" value="Potwierdź nowe hasło: " />
                     <p:inputText id="newPassword2" type="password" value="#{userView.newPassword2}" required="true" />
-                    <p:commandButton value="Wyślij" process="@all" ajax="false" action="#{userView.changePassword}" update="@all" />
+                    <p:commandButton value="Wyślij" process="@parent" ajax="false" action="#{userView.changePassword}" update="@all" />
                 </h:panelGrid>
             </h:panelGroup>
 
