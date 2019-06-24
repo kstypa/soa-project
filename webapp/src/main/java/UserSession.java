@@ -1,10 +1,14 @@
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.soa.api.IAddressController;
+import project.soa.model.Address;
 import project.soa.model.User;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.util.ArrayList;
 
 @ManagedBean(name = "userSession")
 @SessionScoped
@@ -14,6 +18,17 @@ import javax.faces.bean.SessionScoped;
 public class UserSession {
 
     private User user;
+
+    ArrayList<Address> addresses;
+
+    @EJB(lookup = "java:global/implementation/AddressController")
+    private IAddressController addressController;
+
+    public ArrayList<Address> getAllAddresses(User user)
+    {
+        addresses=(ArrayList<Address>) addressController.getAddressesByUser(user);
+        return addresses;
+    }
 
     public boolean isLoggedIn() {
         return user != null;

@@ -30,6 +30,8 @@ public class MenuView {
     @EJB(lookup = "java:global/implementation/CategoryController")
     private ICategoryController categoryController;
 
+    private CartView cartView;
+
     @ManagedProperty(value = "#{userSession}")
     private UserSession userSession;
 
@@ -194,6 +196,7 @@ public class MenuView {
 
 
         FacesContext context = FacesContext.getCurrentInstance();
+        cartView.addDish(dish);
         context.addMessage(null, new FacesMessage("Sukces", "Dodano pozycję " + dish.getName() + " do koszyka"));
     }
 
