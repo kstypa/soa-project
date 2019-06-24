@@ -26,8 +26,9 @@ public class Listener implements MessageListener {
     public void onMessage(Message message) {
         TextMessage textMessage=(TextMessage)message;
         try {
-            orderStorage.add(textMessage.getText());
-            textMessage.getText();
+            String messageText=textMessage.getText();
+            System.out.println(messageText);
+            orderStorage.add(messageText);
         } catch (JMSException e) {
             e.printStackTrace();
         }
