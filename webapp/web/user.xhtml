@@ -74,6 +74,25 @@
 
             <br/><br/>
 
+
+            <h2>Dodaj adres</h2>
+            <h:panelGroup id="addressAdd">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="city" value="Miasto: " />
+                    <p:inputText id="city"  value="#{userSession.city}" required="true" />
+                    <p:outputLabel for="street" value="Ulica: " />
+                    <p:inputText id="street" value="#{userSession.street}" required="true" />
+                    <p:outputLabel for="building" value="Budynek: " />
+                    <p:inputText id="building"  value="#{userSession.building}" required="true" />
+                    <p:outputLabel for="apartment" value="Numer mieszkania: " />
+                    <p:inputText id="apartment" value="#{userSession.apartment}" required="true" />
+                    <p:outputLabel for="postalcode" value="Kod pocztowy: " />
+                    <p:inputText id="postalcode"  value="#{userSession.postal_code}" required="true" />
+                    <p:commandButton value="Wyślij" process="@all" ajax="false" action="#{userSession.addAddress}" update="@all" />
+                </h:panelGrid>
+            </h:panelGroup>
+
+
             <h2>Zmiana hasła</h2>
             <h:panelGroup id="passwordChange">
                 <h:panelGrid columns="2">
