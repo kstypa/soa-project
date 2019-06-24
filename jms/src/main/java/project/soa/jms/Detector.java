@@ -21,35 +21,27 @@ public class Detector {
     private HashMap<Integer, Order> oldOrders;
 
 
-    @Schedule(second = "*/40", minute = "*", hour = "*", persistent = false)
-    public void check(){
+    @Schedule(second = "*/20", minute = "*", hour = "*", persistent = false)
+    public void check() {
         System.out.println("checking database");
-        ArrayList<Order> newOrders=(ArrayList<Order>) orderController.getAllOrders();
-        HashMap<Integer, Order> newOrdersMap= new HashMap<>();
-        if(!oldOrders.isEmpty())
-        {
+        ArrayList<Order> newOrders = (ArrayList<Order>) orderController.getAllOrders();
+        HashMap<Integer, Order> newOrdersMap = new HashMap<>();
+        if (oldOrders != null) {
             Order previousOrder;
             Order newOrder;
-            for (Order order:newOrders) {
-                newOrdersMap.put(order.getId(),order);
-                newOrder=order;
-                previousOrder=oldOrders.get(order.getId());
-                if(previousOrder.getStatus()!=newOrder.getStatus())
-                    sender.sendMessage(order.getUser().getId(),order.getId());
+            for (Order order : newOrders) {
+                newOrdersMap.put(order.getId(), order);
+                newOrder = order;
+                previousOrder = oldOrders.get(order.getId());
+                if (previousOrder.getStatus() != newOrder.getStatus())
+                    sender.sendMessage(order.getUser().getId(), order.getId());
+            }
+        } else {
+            for (Order order : newOrders) {
+                newOrdersMap.put(order.getId(), order);
             }
         }
-        else { for (Order order:newOrders) { newOrdersMap.put(order.getId(),order); } }
-        oldOrders=newOrdersMap;
-//        expiredSpots.forEach(element -> {
-//            String message= Integer.toString((int) element.getSpotId());
-//            sender.sendMessage(" bilet wygasl", ((int) element.getSpotId()),((int) element.getZoneId().getZoneId()));
-//
-//        });
-//
-//        unpaidSpots.forEach(element->{
-//            String message= Integer.toString((int) element.getSpotId());
-//            sender.sendMessage(" zajęto miejsce bez biletu", ((int) element.getSpotId()),((int) element.getZoneId().getZoneId()));
-//        });
+        oldOrders = newOrdersMap;
     }
 
 

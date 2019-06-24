@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @ManagedBean(name = "userView")
 @ViewScoped
@@ -43,10 +44,11 @@ public class UserView {
             if(userIdString.equals(String.valueOf(userSession.getUser().getId())))
             {
                 Order order = orderController.getOrder(Integer.valueOf(orderIdString));
-                result.add("Status zamówienia: " + order.getStatus().toString());
+                result.add("Status zamówienia nr " + order.getId() + ": " + order.getStatus().toString());
             }
         }
-        return result;
+        // unikalne elementy
+        return new ArrayList<>(new HashSet<>(result));
     }
 
     public void changePassword() {

@@ -13,10 +13,9 @@ import javax.jms.TextMessage;
         "destinationType", propertyValue =
         "javax.jms.Queue"),
         @ActivationConfigProperty(propertyName = "destination"
-                ,propertyValue = "java:jboss/exported/jms/queue/SOA_test")})
+                ,propertyValue = "java:jboss/exported/jms/queue/SOA_Test")})
 public class Listener implements MessageListener {
 
-//    @EJB(lookup = "java:global/webapp/OrderStorage")
     OrderStorage orderStorage;
 
     public Listener() {

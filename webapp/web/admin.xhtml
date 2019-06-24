@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Panel administracyjny</title>
+</h:head>
+
+<h:body>
+    <h1>Panel administracyjny</h1>
+    <h:form id="form">
+        <p:button value="Strona główna" outcome="index.xhtml" />
+        <p:button value="Menu" outcome="menu.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <p:button value="Zamówienia" outcome="orders.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <p:button value="Logowanie" outcome="login.xhtml" rendered="#{!index.userSession.loggedIn}" />
+        <p:button value="Rejestracja" outcome="register.xhtml" rendered="#{!index.userSession.loggedIn}" />
+        <p:button value="Panel użytkownika" outcome="user.xhtml" rendered="#{index.userSession.loggedIn}" />
+        <br/><br/>
+        <h2>#{userSession.user.first_name} #{userSession.user.last_name} (#{userSession.user.login})</h2>
+
+        <h:outputText value="#{userView.message}" /><br/>
+
+        <h:panelGrid rendered="#{userSession.loggedIn}">
+
+            <h2>Role użytkowników</h2>
+            <p:dataTable value="#{adminView.users}" var="user">
+
+            </p:dataTable>
+
+        </h:panelGrid>
+    </h:form>
+</h:body>
+
+</html>

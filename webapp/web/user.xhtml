@@ -23,7 +23,7 @@
 
         <h:outputText value="#{userView.message}" /><br/>
 
-        <h:panelGrid>
+        <h:panelGrid rendered="#{userSession.loggedIn}">
             <h3>Subskrypcje</h3>
             <p:repeat id="subscriptionsList" rendered="#{userSession.client}" value="#{subscriptions.getAllSubscriptionsForUser(userSession.user)}" var="subscription">
                 <p:outputPanel id="deliveryBoyOrder" style="border-bottom: 1px solid black; margin-bottom: 10px;">
@@ -61,10 +61,8 @@
             </p:repeat>
 
             <h:panelGroup id="alert" style="margin-top: 20px" rendered="#{userSession.client}">
-                <!--<h:form>
-                    <p:poll interval="20" listener="#{userView.orderStorage.arrayList}" />
-                </h:form> -->
-                <p:dataList value="#{userView.allOrderChanges}" var="alert" type="ordered">
+                <p:poll interval="2" listener="#{userView.orderStorage.arrayList}" update="notifications" />
+                <p:dataList id="notifications" value="#{userView.allOrderChanges}" var="alert" type="unordered">
                     <f:facet name="header">
                         POWIADOMIENIA
                     </f:facet>
@@ -86,6 +84,10 @@
                     <p:commandButton value="Wyślij" process="@all" ajax="false" action="#{userView.changePassword}" update="@all" />
                 </h:panelGrid>
             </h:panelGroup>
+
+            <br/><br/>
+
+            <p:button value="Panel administracyjny" outcome="admin.xhtml" rendered="#{userSession.manager}" />
 
         </h:panelGrid>
     </h:form>

@@ -19,7 +19,7 @@ public class Sender {
     @JMSConnectionFactory("java:jboss/DefaultJMSConnectionFactory")
     private JMSContext context;
 
-    @Resource(mappedName = "java:jboss/exported/jms/queue/SOA_test")
+    @Resource(mappedName = "java:jboss/exported/jms/queue/SOA_Test")
     private Queue queue;
 
 
