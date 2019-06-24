@@ -47,6 +47,22 @@ public class SubscriptionController extends AbstractController implements ISubsc
     }
 
     @Override
+    public List<Subscription> getSubscriptionsByUserId(int id) {
+        List<Subscription> subscriptions = new ArrayList<Subscription>();
+        Query query = entityManager.createQuery("from soa_subscriptions where user.id=:id", Subscription.class);
+        query = query.setParameter("id", id);
+
+        try {
+            subscriptions = query.getResultList();
+        }
+        catch (Exception e) {
+            System.out.println("select error");
+        }
+
+        return subscriptions;
+    }
+
+    @Override
     public List<Subscription> getSubscriptionsByAddress(Address address) {
         List<Subscription> subscriptions = new ArrayList<Subscription>();
         Query query = entityManager.createQuery("from soa_subscriptions where address=:address", Subscription.class);

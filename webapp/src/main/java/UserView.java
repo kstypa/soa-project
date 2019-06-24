@@ -4,6 +4,7 @@ import project.soa.model.Order;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.util.ArrayList;
 
@@ -12,7 +13,10 @@ import java.util.ArrayList;
 @Data
 public class UserView {
     OrderStorage orderStorage;
+
+    @ManagedProperty(value = "#{userSession}")
     UserSession userSession;
+
     @EJB(lookup = "java:global/implementation/OrderController")
     IOrderController orderController;
 

@@ -15,6 +15,8 @@ public interface ISubscriptionController {
 
     public List<Subscription> getSubscriptionsByUser(User user);
 
+    public List<Subscription> getSubscriptionsByUserId(int id);
+
     public List<Subscription> getSubscriptionsByAddress(Address address);
 
     public Subscription getSubscription(int id);

@@ -10,6 +10,40 @@
 </h:head>
 <h:panelGrid>
 
+    <p:repeat id="subscriptionsList" rendered="#{userSession.client}" value="#{subscriptions.getAllSubscriptionsForUser(userSession.user)}" var="subscription">
+        <p:outputPanel id="deliveryBoyOrder" style="border-bottom: 1px solid black; margin-bottom: 10px;">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputText value="Id:" />
+                <h:outputText value="#{subscription.id}" style="font-weight: bold"/>
+
+                <h:outputText value="Użytkownik:" />
+                <h:outputText value="#{subscription.user.first_name} #{subscription.user.last_name}" style="font-weight: bold"/>
+
+                <h:outputText value="Adres:" />
+                <p:outputPanel>
+                    <h:outputText value="#{subscription.address.street} #{subscription.address.building}/#{subscription.address.apartment}" style="font-weight: bold"/><br/>
+                    <h:outputText value="#{subscription.address.postal_code} #{subscription.address.city}" style="font-weight: bold"/>
+                </p:outputPanel>
+
+                <h:outputText value="Data zamówienia:" />
+                <h:outputText value="#{subscription.ordered_date.toLocalDate()} #{subscription.ordered_date.toLocalTime()}" style="font-weight: bold"/>
+
+                <h:outputText value="Godzina dostarczenia:" />
+                <h:outputText value="#{subscription.delivery_hour.toLocalTime()}" style="font-weight: bold"/>
+
+                <h:outputText value="Dzień dostarczenia:" />
+                <h:outputText value="#{subscription.delivery_day}" style="font-weight: bold"/>
+
+                <h:outputText value="Lista dań:" />
+                <p:repeat value="#{subscription.dishes}" var="dish">
+                    <h:outputText value="#{dish.name}" style="font-weight: bold"/><br/>
+                </p:repeat>
+
+                <p:commandButton process="@parent" value="Usuń subskrypcje"
+                                 action="#{subscriptions.cancelSubscription(subscription)}" style="zoom: 0.7" update="@form" />
+            </h:panelGrid>
+        </p:outputPanel>
+    </p:repeat>
         <h:panelGroup id="alert" style="margin-top: 20px" rendered="#{userSession.client}">
         <!--<h:form>
             <p:poll interval="20" listener="#{userView.orderStorage.arrayList}" />
