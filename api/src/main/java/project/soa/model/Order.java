@@ -35,7 +35,7 @@ public class Order implements Serializable {
 
     public enum Status { PLACED, PREPARING, PREPARED, DELIVERING, DELIVERED, CANCELED }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "soa_order_contents",
             joinColumns = @JoinColumn(name = "order_id"),

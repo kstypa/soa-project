@@ -46,17 +46,25 @@ public class OrdersView {
 
     @PostConstruct
     private void init(){
-        allOrders=orderController.getAllOrders();
-        placedOrders=orderController.getAllPlacedOrders();
-        preparingOrders=orderController.getAllPreparingOrders();
-        preparedOrders=orderController.getAllPreparedOrders();
-        deliveringOrders=orderController.getAllDeliveringOrders();
-        deliveredOrders=orderController.getAllDeliveredOrders();
-        canceledOrders=orderController.getAllCanceledOrders();
-        placedOrPreparingOrders=new ArrayList<>();
+        placedOrPreparingOrders = new ArrayList<>();
         preparedOrDeliveringOrders = new ArrayList<>();
+        refresh();
+    }
+
+    private void refresh() {
+        allOrders = orderController.getAllOrders();
+        placedOrders = orderController.getAllPlacedOrders();
+        preparingOrders = orderController.getAllPreparingOrders();
+        preparedOrders = orderController.getAllPreparedOrders();
+        deliveringOrders = orderController.getAllDeliveringOrders();
+        deliveredOrders = orderController.getAllDeliveredOrders();
+        canceledOrders = orderController.getAllCanceledOrders();
+
+        placedOrPreparingOrders.clear();
         placedOrPreparingOrders.addAll(placedOrders);
         placedOrPreparingOrders.addAll(preparingOrders);
+
+        preparedOrDeliveringOrders.clear();
         preparedOrDeliveringOrders.addAll(preparedOrders);
         preparedOrDeliveringOrders.addAll(deliveringOrders);
     }
@@ -79,19 +87,29 @@ public class OrdersView {
         }
     }
 
-    public Order.Status moveToNextStatus(Order.Status status)
+    public void moveToNextStatus(Order order)
     {
-        switch (status) {
+        Order.Status newStatus;
+        switch (order.getStatus()) {
             case PLACED:
-                return Order.Status.PREPARING;
+                newStatus = Order.Status.PREPARING; break;
             case PREPARING:
-                return Order.Status.PREPARED;
+                newStatus = Order.Status.PREPARED; break;
             case PREPARED:
-                return Order.Status.DELIVERING;
+                newStatus = Order.Status.DELIVERING; break;
             case DELIVERING:
-                return Order.Status.DELIVERED;
+                newStatus = Order.Status.DELIVERED; break;
+            default:
+                newStatus = Order.Status.PLACED;
         }
-        return Order.Status.PLACED;
+
+        orderController.editOrder(order, order.getUser(), order.getAddress(), order.getDelivery_date(), newStatus, order.getDishes());
+        refresh();
+    }
+
+    public void resetStatusToPlaced(Order order) {
+        orderController.editOrder(order, order.getUser(), order.getAddress(), order.getDelivery_date(), Order.Status.PLACED, order.getDishes());
+        refresh();
     }
 
 }
